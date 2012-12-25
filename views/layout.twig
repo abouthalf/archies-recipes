@@ -4,8 +4,14 @@
 <!--[if IE 8]>    <html class="no-js lt-ie9" lang="en"> <![endif]-->
 <!--[if gt IE 8]><!--> <html class="no-js" lang="en"> <!--<![endif]-->
 	<head>
-		<title>{%  block title %}{% endblock %}</title>
-		{% block meta %}{% endblock %}
+		<title>
+			{{ app.siteName }}
+			{% if block('title') and not isHome %} : {% endif %}
+			{%  block title %}{% endblock %}
+		</title>
+		{% block meta %}
+		<meta name="keywords" content="{{ app.defaultKeywords }}">
+		{% endblock %}
 		<link rel="stylesheet" href="/css/styles.css" media="all">
 		<script src="/js/site-min.js"></script>
 	</head>
@@ -13,7 +19,7 @@
 		<header>
 			<h1>
 				<a href="/index.html">
-					Archie's recipe book
+					{{ app.siteName }}
 				</a>
 			</h1>
 		</header>

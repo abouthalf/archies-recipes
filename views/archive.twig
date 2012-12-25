@@ -2,7 +2,11 @@
 
 {% block title %}{{ title }}{% endblock %}
 
-{% block keywords %}{{ keywords }}{% endblock %}
+{%  block meta %}
+	{%  for m in meta %}
+		<meta name="{{ m.name }}" content="{{ m.content }}">
+	{%  endfor %}
+{%  endblock %}
 
 {% block content %}
 <p>archive!</p>

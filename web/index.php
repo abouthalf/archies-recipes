@@ -21,6 +21,11 @@ $app->register(new TwigServiceProvider(), array(
 		)
 	));
 
+// globals and defaults
+$app['siteName'] = 'Archie’s Recipe Book';
+$app['homePage'] = 'index.html';
+$app['defaultKeywords'] = "Great grandfather's recipe book archive";
+
 /**
  * Page Converter callback - converts page name into SimpleXML object
  *
@@ -90,6 +95,7 @@ function getMedia($pageName, $app)
 			$app['image'] = $image;
 			$app['next'] = $next;
 			$app['prev'] = $prev;
+			$app['current'] = $pageName;
 			break;
 		}
 
@@ -137,6 +143,7 @@ $app->get('/blog/{year}/{month}/{day}/{id}', function(Application $app, Request 
 
 	$action = 'home'; //default! show a list of 10 last posts
 	$pattern = $allHtmlFiles = '/^.*\.html$/'; // all html files
+	$date = sprintf('%s/%s/%s',$year,$month,$day); // archive date
 	if ($id) {
 		$action = 'post';
 		$pattern = sprintf('/^(%s-%s-%s).*(%s)$/',$year,$month,$day,$id); // exact html file
@@ -146,9 +153,11 @@ $app->get('/blog/{year}/{month}/{day}/{id}', function(Application $app, Request 
 	} else if ($month !== '00') {
 		$action = 'month';
 		$pattern = sprintf('/^(%s-%s).*\.html/',$year,$month); // all html files for a given month/year
+		$date = sprintf('%s/%s',$year,$month);
 	} else if ($year !== '0000') {
 		$action = 'year';
 		$pattern = sprintf('/^(%s).*\.html/',$year); // all html files for a given year
+		$date = sprintf('%s',$year);
 	}
 
 	$matches = array_filter($files,function($f) use($pattern) {
@@ -164,22 +173,47 @@ $app->get('/blog/{year}/{month}/{day}/{id}', function(Application $app, Request 
 	// single post
 	if (count($matches) === 1 && $action == 'post')
 	{
-		$out = array();
-		$out['post'] = $post = getPageContent('blog/'.$matches[0]);
-		$out = $out + getMetaData($post); // combine meta data array and $out array
+		$post = getPageContent('blog/'.$matches[0]);
+		$out = array(
+			'year' => $year,
+			'month' => $month,
+			'day' => $day,
+			'post' => $post,
+			'meta' => getMetaData($post),
+			'permalink' => $request->getUri()
+		);
 		return $twig->render('post.twig',$out);
 	}
 
-
-	// split into pages if needed
-	$pages = array_chunk($matches,9);
-	$totalPages = count($pages);
-	$postsPerPage = $pages[$page];
-	$posts = array();
-	foreach($postsPerPage as $post)
+	// archive page
+	if (count($matches) > 1 && $action != 'post')
 	{
-		$posts[] = getPageContent('blog/'.$post);
+		$title = 'Archives for '.$date;
+		// split into pages if needed
+		$pages = array_chunk($matches,9);
+		$totalPages = count($pages);
+		$postsPerPage = $pages[$page];
+		$posts = array();
+		foreach($postsPerPage as $post)
+		{
+			$posts[] = getPageContent('blog/'.$post);
+		}
+		$next = $prev = null;
+		$out = array(
+			'meta' => array(
+				array('name'=>'description','content'=>$title),
+				array('name'=>'keywords','content'=>$app['defaultKeywords'])
+			),
+			'action' => $action,
+			'posts' => $posts,
+			'title' => $title
+		);
+		return $twig->render('archive.twig',$out);
 	}
+
+
+
+
 
 	$out = array('posts' => $posts, 'keywords'=>'foo');
 
@@ -264,20 +298,22 @@ $app->get('/{page}', function(Application $app, Request $request, $page)
 	// template output
 	$out = array();
 	/* @var $page SimpleXMLElement */
-
-	$out['title'] = $page->head->title;
-	$out['body'] = $page->body->asXML();
-	$out['keywords'] = '';
-	$out['next'] = $app['next'];
-	$out['prev'] = $app['prev'];
-	$out['image'] = $app['image'];
-	$out['meta'] = getMetaData($page);
+	$out = array(
+		'next' => $app['next'],
+		'prev' => $app['prev'],
+		'current' => $app['current'],
+		'image' => $app['image'],
+		'meta' => getMetaData($page),
+		'permalink' => $request->getUri(),
+		'page' => $page,
+		'isHome' => ($app['current'] == $app['homePage'])
+	);
 
 	/** @var $twig Twig_Environment */
 	$twig = $app['twig'];
 	return $twig->render('page.twig',$out);
 })
-->value('page','index.html')
+->value('page',$app['homePage'])
 ->assert('page','^(?!blog)[\w/]+\.html$')
 ->convert('page',$loadPageXML);
 

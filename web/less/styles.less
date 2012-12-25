@@ -1,0 +1,50 @@
+* { -moz-box-sizing: border-box; -webkit-box-sizing: border-box; box-sizing: border-box; }
+
+@import "normalize.less";
+@import "baseType.less";
+
+@backgroundColor: #f2f2ee;
+
+/* base layout */
+
+body
+{
+	background-color: @backgroundColor;
+	padding: 24px;
+	padding: 1.5rem;
+}
+
+header, footer, h1, h2, h3, h4, h5, h6
+{
+	color: #918a77;
+	font-weight: normal;
+}
+
+header, footer
+{
+	margin: -1.5rem;
+	background-color: lighten(@backgroundColor,10);
+}
+
+aside
+{
+	margin-bottom: 24px;
+	margin-bottom: 1.5rem;
+	padding: 1.5rem;
+	text-align: center;
+}
+
+aside a 
+{
+	display: block;
+	width: 200px;
+	margin: 0 auto;
+}
+
+aside img
+{
+	display: block;
+	width: 100%;
+	height: auto;
+	margin: 0 auto;
+}

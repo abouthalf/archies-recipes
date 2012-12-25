@@ -1,0 +1,40 @@
+{% extends 'layout.twig' %}
+
+{% block title %}{{ title }}{% endblock %}
+
+{%  block meta %}
+	{%  for m in meta %}
+	<meta name="{{ m.name }}" content="{{ m.content }}">
+	{%  endfor %}
+{%  endblock %}
+
+
+
+{% block content %}
+	{% if image %}
+		<aside>
+			<a href="images/{{ image }}">
+				<img src="images/{{ image }}" alt="{{ title }}">
+			</a>
+		</aside>
+	{% endif %}
+	<article>
+		{{ body|replace({'<body>':'','</body>':''})|raw }}
+	</article>
+	<nav>
+		{% if next or prev %}
+		<ul>
+			{% if prev %}
+			<li>
+				<a href="{{ prev }}">Previous</a>
+			</li>
+			{% endif %}
+			{% if next %}
+				<li>
+					<a href="{{ next }}">Next</a>
+				</li>
+			{% endif %}
+		</ul>
+		{% endif %}
+	</nav>
+{% endblock %}

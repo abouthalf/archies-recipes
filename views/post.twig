@@ -1,0 +1,12 @@
+{% extends 'layout.twig' %}
+
+{% block title %}{{ post.head.title }}{% endblock %}
+
+{% block keywords %}{{ keywords }}{% endblock %}
+
+{% block content %}
+		{% for post in posts %}
+
+			{{ post.body.asXML()|replace({'<body>':'','</body>':''})|raw }}
+		{% endfor %}
+{% endblock %}

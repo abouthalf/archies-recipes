@@ -1,4 +1,6 @@
-FallbackResource /index.php
-#RewriteEngine On
-#RewriteCond %{REQUEST_FILENAME} !-f
-#RewriteRule ^ index.php [L]
+# FallbackResource /index.php #server doesn't support
+RewriteEngine On
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteRule ^ index.php [L]
+
+AddDefaultCharset UTF-8

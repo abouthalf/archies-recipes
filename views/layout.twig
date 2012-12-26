@@ -9,6 +9,7 @@
 			{% if block('title') and not isHome %} : {% endif %}
 			{%  block title %}{% endblock %}
 		</title>
+		<meta charset=utf-8>
 		{% block meta %}
 		<meta name="keywords" content="{{ app.defaultKeywords }}">
 		{% endblock %}

@@ -74,7 +74,7 @@ function getPageContent($page)
 	fclose($h);
 
 	// convert to object
-	$dom = new DOMDocument();
+	$dom = new DOMDocument('1.0','UTF-8');
 	$dom->strictErrorChecking = false;
 	@$dom->loadHTML($txt); // suppress errors
 	$xml = simplexml_import_dom($dom);

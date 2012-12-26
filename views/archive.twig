@@ -1,6 +1,15 @@
 {% extends 'layout.twig' %}
 
-{% block title %}{{ title }}{% endblock %}
+
+{% block title %}
+	{% spaceless %}
+	{% if action == 'home' %}
+		Blog
+	{% else %}
+		Blog archives for {{ date }}
+	{% endif %}
+	{% endspaceless %}
+{% endblock %}
 
 {%  block meta %}
 	{%  for m in meta %}
@@ -9,10 +18,38 @@
 {%  endblock %}
 
 {% block content %}
-<p>archive!</p>
-	<p>
-		{% for post in posts %}
-			{{ post }}<br>
+
+<nav class="breadcrumb">
+	<ul>
+		<li>
+			<a href="/">Home</a>
+		</li>
+		<li>
+			<a href="/blog">Blog</a>
+		</li>
+		{% set pCrumb = '/' %}
+		{% for crumb in breadcrumb %}
+		<li>
+			<a href="/blog{{ pCrumb }}{{ crumb }}">{{ crumb }}</a>
+		</li>
+			{% set pCrumb = pCrumb ~ crumb ~ '/' %}
 		{% endfor %}
-	</p>
+	</ul>
+</nav>
+
+<div class="archives">
+	{% for post in posts %}
+		<article>
+			<h1 class="post-title">
+				<a href="{{ post.permalink }}">
+					{{ post.head.title }}
+				</a>
+			</h1>
+			{{ post.body.asXML()|replace({'<body>':'','</body>':''})|raw }}
+		</article>
+	{% endfor %}
+	{% set prefix = '?page=' %}
+	{% include '_pageNav.twig' %}
+</div>
+
 {% endblock %}

@@ -1,0 +1,19 @@
+{% if not prefix %}
+{% set prefix = '' %}
+{% endif %}
+<nav>
+	{% if next or prev %}
+		<ul>
+			{% if prev %}
+				<li>
+					<a href="{{ prefix }}{{ prev }}">Previous</a>
+				</li>
+			{% endif %}
+			{% if next %}
+				<li>
+					<a href="{{ prefix }}{{ next }}">Next</a>
+				</li>
+			{% endif %}
+		</ul>
+	{% endif %}
+</nav>

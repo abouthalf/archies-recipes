@@ -28,7 +28,7 @@
 			</ul>
 		</nav>
 		<article>
-			{{ body|replace({'<body>':'','</body>':''})|raw }}
+			{{ body|replace({'<body>':'','</body>':''}) }}
 		</article>
 		{% include '_pageNav.twig' %}
 	</div>

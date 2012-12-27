@@ -30,7 +30,9 @@ $app->register(new TwigServiceProvider(), array(
 		'twig.path' => __DIR__ . '/../views',
 		'twig.options' => array(
 			'cache' => __DIR__ . '/../views/cache',
-			'strict_variables' => false
+			'strict_variables' => false,
+			'autoescape' => false,
+			'charset' => 'utf-8'
 		)
 	));
 
@@ -79,15 +81,6 @@ function getPageContent($page)
 	@$dom->loadHTML($txt); // suppress errors
 	$xml = simplexml_import_dom($dom);
 	return $xml;
-
-
-//	if ($txt = file_get_contents($f))
-//	{
-//	}
-//	else
-//	{
-//		throw new Exception('content file not found');
-//	}
 }
 
 /**

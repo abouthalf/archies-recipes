@@ -1,6 +1,6 @@
 {% extends 'layout.twig' %}
 
-{% block title %}{{ page.head.title }}{% endblock %}
+{% block title %}{{ title }}{% endblock %}
 
 {%  block meta %}
 	{%  for m in meta %}
@@ -14,7 +14,7 @@
 	{% if image %}
 	<aside>
 		<a href="images/{{ image }}">
-			<img src="images/{{ image }}" alt="{{ page.head.title }}">
+			<img src="images/{{ image }}" alt="{{ title }}">
 		</a>
 	</aside>
 	{% endif %}
@@ -23,12 +23,12 @@
 			<ul>
 				<li><a href="/">Home</a></li>
 				{% if current != 'index.html' %}
-					<li><a href="{{ permalink }}">{{ page.head.title }}</a></li>
+					<li><a href="{{ permalink }}">{{ title }}</a></li>
 				{% endif %}
 			</ul>
 		</nav>
 		<article>
-			{{ page.body.asXML()|replace({'<body>':'','</body>':''})|raw }}
+			{{ body|replace({'<body>':'','</body>':''})|raw }}
 		</article>
 		{% include '_pageNav.twig' %}
 	</div>

@@ -66,25 +66,28 @@ $loadPageXML = function($page) use ($app)
 function getPageContent($page)
 {
 	$f = __DIR__. '/../html/'.$page;
-//	$h = fopen($f,'r');
-//	if ($h === false) {
-//		throw new Exception('content file not found');
-//	}
-//	$txt = fread($h, filesize($f));
-//	fclose($h);
-	if ($txt = file_get_contents($f))
-	{
-		// convert to object
-		$dom = new DOMDocument('1.0','UTF-8');
-		$dom->strictErrorChecking = false;
-		@$dom->loadHTML($txt); // suppress errors
-		$xml = simplexml_import_dom($dom);
-		return $xml;
-	}
-	else
-	{
+	$h = fopen($f,'rb');
+	if ($h === false) {
 		throw new Exception('content file not found');
 	}
+	$txt = fread($h, filesize($f));
+	fclose($h);
+
+	// convert to object
+	$dom = new DOMDocument('1.0','UTF-8');
+	$dom->strictErrorChecking = false;
+	@$dom->loadHTML($txt); // suppress errors
+	$xml = simplexml_import_dom($dom);
+	return $xml;
+
+
+//	if ($txt = file_get_contents($f))
+//	{
+//	}
+//	else
+//	{
+//		throw new Exception('content file not found');
+//	}
 }
 
 /**

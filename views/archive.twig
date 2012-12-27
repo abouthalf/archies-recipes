@@ -19,25 +19,24 @@
 
 {% block content %}
 
-<nav class="breadcrumb">
-	<ul>
-		<li>
-			<a href="/">Home</a>
-		</li>
-		<li>
-			<a href="/blog">Blog</a>
-		</li>
-		{% set pCrumb = '/' %}
-		{% for crumb in breadcrumb %}
-		<li>
-			<a href="/blog{{ pCrumb }}{{ crumb }}">{{ crumb }}</a>
-		</li>
-			{% set pCrumb = pCrumb ~ crumb ~ '/' %}
-		{% endfor %}
-	</ul>
-</nav>
-
 <div class="archives">
+	<nav class="breadcrumb">
+		<ul>
+			<li>
+				<a href="/">Home</a>
+			</li>
+			<li>
+				<a href="/blog">Blog</a>
+			</li>
+			{% set pCrumb = '/' %}
+			{% for crumb in breadcrumb %}
+				<li>
+					<a href="/blog{{ pCrumb }}{{ crumb }}">{{ crumb }}</a>
+				</li>
+				{% set pCrumb = pCrumb ~ crumb ~ '/' %}
+			{% endfor %}
+		</ul>
+	</nav>
 	{% for post in posts %}
 		<article>
 			<h1 class="post-title">

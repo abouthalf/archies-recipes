@@ -21,7 +21,6 @@ html, body {height: 100%;}
 body
 {
 	background-color: @backgroundColor;
-//	padding-left: 40%;
 }
 
 header, footer, h1, h2, h3, h4, h5, h6
@@ -41,6 +40,7 @@ nav
 
 nav.breadcrumb
 {
+	margin-top: 1.5rem;
 	.universalMarginBottom;
 	ul
 	{
@@ -86,22 +86,36 @@ header
 	background-color: lighten(@backgroundColor,10);
 	border-left: .5em solid @darkAccent;
 	outline: .5em solid @mediumAccent;
-}
 
-header h1
-{
-	font-size: 1.5rem;
-	padding-left: 5rem;
-	background-image: url('/css/images/logo.png');
-	background-position: left center;
-	background-size: auto 4rem;
-	background-repeat: no-repeat;
+	h1
+	{
+		font-size: 1.5rem;
+		padding-left: 5rem;
+		background-image: url('/css/images/logo.png');
+		background-position: left center;
+		background-size: auto 4rem;
+		background-repeat: no-repeat;
 
+	}
+	nav
+	{
+		ul, li
+		{
+			margin-left: 0;
+			padding-left: 0;
+		}
+		ul
+		{
+			width: @headerWidth;
+			padding-left: 5rem;
+		}
+	}
 }
 
 footer
 {
 	.small;
+	.universalMarginBottom;
 	background-image: url('/css/images/abouthalfLogo.png');
 	background-position: bottom center;
 	background-repeat: no-repeat;
@@ -110,6 +124,11 @@ footer
 	text-align: center;
 	padding-bottom: @headerWidth/4;
 	margin-right: @headerWidth + 2;
+}
+
+div.archives + footer
+{
+	margin-right: 0;
 }
 
 div.page,
@@ -133,23 +152,20 @@ aside
 	top: 0;
 	width: 40%;
 	height: 100%;
-//	margin-left: -40%;
-}
-
-aside a 
-{
-	margin: 0 auto;
-	display: block;
-}
-
-aside img
-{
-//	display: block;
-	width: auto;
-	height: 100%;
-	margin: 0 auto;
-	border-right: .5em solid @darkAccent;
-	outline: .5em solid @mediumAccent;
+	a
+	{
+		margin: 0 auto;
+		display: block;
+		img
+		{
+//			width: 100%;
+//			max-width: 100%;
+			max-height: 100%;
+			margin: 0 auto;
+			border-right: .5em solid @darkAccent;
+			outline: .5em solid @mediumAccent;
+		}
+	}
 }
 
 

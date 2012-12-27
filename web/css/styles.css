@@ -294,4 +294,5 @@ footer{font-size:14px;font-size:0.875rem;line-height:1.714;margin-top:0;margin-b
 div.archives+footer{margin-right:0;}
 div.page,div.archives{margin-left:14em;margin-right:14em;padding-left:1.5rem;}
 aside+div.page,aside+div.page+footer{margin-left:40%;}
-aside{position:fixed;top:0;width:40%;height:100%;}aside a{margin:0 auto;display:block;}aside a img{max-height:100%;margin:0 auto;border-right:0.5em solid #918a77;outline:0.5em solid #b6b3aa;}
+aside{position:absolute;top:0;width:40%;height:100%;border-right:0.5em solid #918a77;outline:0.5em solid #b6b3aa;}aside a{margin:0 auto;display:block;}aside a img{position:fixed;max-width:100%;max-height:100%;}
+@media (max-width:37.5em){body{color:blue;}}@media (max-width:60em){body{color:red;}}

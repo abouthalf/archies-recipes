@@ -148,26 +148,40 @@ aside + div.page + footer
 
 aside
 {
-	position: fixed;
+	position: absolute;
 	top: 0;
 	width: 40%;
 	height: 100%;
+	border-right: .5em solid @darkAccent;
+	outline: .5em solid @mediumAccent;
 	a
 	{
 		margin: 0 auto;
 		display: block;
 		img
 		{
-//			width: 100%;
-//			max-width: 100%;
+			position: fixed;
+			max-width: 100%;
 			max-height: 100%;
-			margin: 0 auto;
-			border-right: .5em solid @darkAccent;
-			outline: .5em solid @mediumAccent;
+
 		}
 	}
 }
 
+// tablet portrait
+@media (max-width: 37.5em)
+{
+	body
+	{
+		color: blue;
+	}
+}
 
-
-
+// tablet landscape
+@media (max-width: 60em)
+{
+	body
+	{
+		color: red;
+	}
+}

@@ -1,17 +1,17 @@
 {% if not prefix %}
 {% set prefix = '' %}
 {% endif %}
-<nav>
+<nav class="pageNav">
 	{% if next or prev %}
 		<ul>
-			{% if prev %}
+			{% if prev and prev != current %}
 				<li>
-					<a href="{{ prefix }}{{ prev }}">Previous</a>
+					<a href="{{ prefix }}{{ prev }}"><i class="icon-arrow-left"></i> Previous</a>
 				</li>
 			{% endif %}
 			{% if next %}
 				<li>
-					<a href="{{ prefix }}{{ next }}">Next</a>
+					<a href="{{ prefix }}{{ next }}"><i class="icon-arrow-right"></i> Next</a>
 				</li>
 			{% endif %}
 		</ul>

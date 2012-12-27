@@ -1,50 +1,157 @@
 * { -moz-box-sizing: border-box; -webkit-box-sizing: border-box; box-sizing: border-box; }
 
+@import "font-awesome";
 @import "normalize.less";
 @import "baseType.less";
 
-@backgroundColor: #f2f2ee;
+@darkAccent: #918a77;
+@mediumAccent: #b6b3aa;
 
-/* base layout */
+@backgroundColor: #f2f2ee;
+@headerFontColor: #918a77;
+
+@headerWidth: 12em;
+@desktopContentLeftPad: 1.5rem;
+
+
+
+/* base styles */
+html, body {height: 100%;}
 
 body
 {
 	background-color: @backgroundColor;
-	padding: 24px;
-	padding: 1.5rem;
+//	padding-left: 40%;
 }
 
 header, footer, h1, h2, h3, h4, h5, h6
 {
-	color: #918a77;
+	color: @headerFontColor;
 	font-weight: normal;
 }
 
-header, footer
+nav
 {
-	margin: -1.5rem;
+	ul, li
+	{
+		margin-left: 0;
+		padding-left: 0;
+	}
+}
+
+nav.breadcrumb
+{
+	.universalMarginBottom;
+	ul
+	{
+		margin: 0;
+		padding: 0;
+		.small;
+		li
+		{
+			display: inline-block;
+			&:before
+			{
+				content: '» ';
+			}
+			&:first-child:before
+			{
+				content: '';
+			}
+		}
+	}
+}
+
+nav.pageNav
+{
+	position: fixed;
+	z-index: 2;
+	width: @headerWidth;
+	bottom: 3rem;
+	right: 0;
+	padding-left: 5rem;
+}
+
+/* desktop layout */
+header
+{
+	position: fixed;
+	z-index: 1;
+	top: 0;
+	right: 0;
+	height: 100%;
+	width: @headerWidth;
+	padding: .5em;
+
 	background-color: lighten(@backgroundColor,10);
+	border-left: .5em solid @darkAccent;
+	outline: .5em solid @mediumAccent;
+}
+
+header h1
+{
+	font-size: 1.5rem;
+	padding-left: 5rem;
+	background-image: url('/css/images/logo.png');
+	background-position: left center;
+	background-size: auto 4rem;
+	background-repeat: no-repeat;
+
+}
+
+footer
+{
+	.small;
+	background-image: url('/css/images/abouthalfLogo.png');
+	background-position: bottom center;
+	background-repeat: no-repeat;
+	background-size: auto @headerWidth/4;
+
+	text-align: center;
+	padding-bottom: @headerWidth/4;
+	margin-right: @headerWidth + 2;
+}
+
+div.page,
+div.archives
+{
+	margin-left: @headerWidth + 2;
+	margin-right: @headerWidth + 2;
+	padding-left: 1.5rem;
+}
+
+
+aside + div.page,
+aside + div.page + footer
+{
+	margin-left: 40%;
 }
 
 aside
 {
-	margin-bottom: 24px;
-	margin-bottom: 1.5rem;
-	padding: 1.5rem;
-	text-align: center;
+	position: fixed;
+	top: 0;
+	width: 40%;
+	height: 100%;
+//	margin-left: -40%;
 }
 
 aside a 
 {
-	display: block;
-	width: 200px;
 	margin: 0 auto;
+	display: block;
 }
 
 aside img
 {
-	display: block;
-	width: 100%;
-	height: auto;
+//	display: block;
+	width: auto;
+	height: 100%;
 	margin: 0 auto;
+	border-right: .5em solid @darkAccent;
+	outline: .5em solid @mediumAccent;
 }
+
+
+
+

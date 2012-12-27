@@ -89,6 +89,7 @@ function getPageContent($page)
  */
 function getMedia($pageName, $app)
 {
+	$app['current'] = $pageName;
 	$xml = simplexml_load_file(__DIR__.'/../html/media.xml');
 	/* @var $pages SimpleXMLElement */
 	$pages = $xml->page;
@@ -112,11 +113,12 @@ function getMedia($pageName, $app)
 			$app['image'] = $image;
 			$app['next'] = $next;
 			$app['prev'] = $prev;
-			$app['current'] = $pageName;
-			break;
+			return;
 		}
-
 	}
+	$app['image'] = '';
+	$app['next'] = '';
+	$app['prev'] = '';
 }
 
 

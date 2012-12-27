@@ -11,23 +11,25 @@
 
 
 {% block content %}
-	<nav class="breadcrumb">
-		<ul>
-			<li><a href="/">Home</a></li>
-			{% if current != 'index.html' %}
-			<li><a href="{{ permalink }}">{{ page.head.title }}</a></li>
-			{% endif %}
-		</ul>
-	</nav>
 	{% if image %}
-		<aside>
-			<a href="images/{{ image }}">
-				<img src="images/{{ image }}" alt="{{ page.head.title }}">
-			</a>
-		</aside>
+	<aside>
+		<a href="images/{{ image }}">
+			<img src="images/{{ image }}" alt="{{ page.head.title }}">
+		</a>
+	</aside>
 	{% endif %}
-	<article>
-		{{ page.body.asXML()|replace({'<body>':'','</body>':''})|raw }}
-	</article>
-	{% include '_pageNav.twig' %}
+	<div class="page">
+		<nav class="breadcrumb">
+			<ul>
+				<li><a href="/">Home</a></li>
+				{% if current != 'index.html' %}
+					<li><a href="{{ permalink }}">{{ page.head.title }}</a></li>
+				{% endif %}
+			</ul>
+		</nav>
+		<article>
+			{{ page.body.asXML()|replace({'<body>':'','</body>':''})|raw }}
+		</article>
+		{% include '_pageNav.twig' %}
+	</div>
 {% endblock %}

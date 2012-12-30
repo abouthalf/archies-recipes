@@ -467,7 +467,7 @@ $app->get('/{page}', function(Application $app, Request $request, $page)
 		'meta' => getMetaData($page),
 		'permalink' => $request->getUri(),
 		'page' => $page,
-		'title' => $page->head->title,
+		'title' => ($app['current'] == $app['homePage']) ? '' : $page->head->title,
 		'body' => $page->body->asXML(),
 		'isHome' => ($app['current'] == $app['homePage'])
 	);

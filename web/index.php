@@ -16,8 +16,9 @@ $app['debug'] = ($_SERVER['APPLICATION_ENV'] === 'development') ? true : false;
 $app['siteName'] = 'Archie’s Recipe Book';
 $app['homePage'] = 'index.html';
 $app['defaultKeywords'] = "Great grandfather's recipe book archive";
-$app['postsPerPage'] = 2;
+$app['postsPerPage'] = 10;
 $app['timezone'] = 'America/Los_Angeles';
+$app['baseUrl'] = 'http://'.$_SERVER['SERVER_NAME'];
 
 /**
  * Register providers
@@ -31,8 +32,8 @@ $app->register(new TwigServiceProvider(), array(
 		'twig.options' => array(
 			'cache' => __DIR__ . '/../views/cache',
 			'strict_variables' => false,
-			'autoescape' => false,
-			'charset' => 'utf-8'
+			'charset' => 'UTF-8'
+			//'auto_reload' => true
 		)
 	));
 
@@ -74,12 +75,7 @@ function getPageContent($page)
 	}
 	$txt = fread($h, filesize($f));
 	fclose($h);
-
-	// convert to object
-	$dom = new DOMDocument('1.0','UTF-8');
-	$dom->strictErrorChecking = false;
-	@$dom->loadHTML($txt); // suppress errors
-	$xml = simplexml_import_dom($dom);
+	$xml = simplexml_load_string($txt);
 	return $xml;
 }
 
@@ -389,7 +385,7 @@ $app->get('/rss', function(Application $app, Request $request)
 	$xml->writeAttribute('xmlns:content','http://purl.org/rss/1.0/modules/content/');
 	$xml->startElement("channel");
 	$xml->startElementNs('atom','link',null);
-	$xml->writeAttribute('href','http://'.$_SERVER['SERVER_NAME'].'/rss');
+	$xml->writeAttribute('href',$app['baseUrl'].'/rss');
 	$xml->writeAttribute('rel','self');
 	$xml->endElement(); // atom:link
 	$xml->writeElement('title', $app['siteName']);
@@ -423,10 +419,6 @@ $app->get('/rss', function(Application $app, Request $request)
 		$xml->startElement('description');
 			$xml->writeCdata($description);
 		$xml->endElement();//description
-//		$xml->startElement('guid');
-//			$xml->writeAttribute('isPermalink','true');
-//			$xml->text($url);
-//		$xml->endElement();// guid
 		$xml->writeElement('pubDate',buildPubDateFromFileName($file,$app));
 		$xml->startElementNs('content','encoded',null);
 			$xml->writeCdata($body);
@@ -440,6 +432,14 @@ $app->get('/rss', function(Application $app, Request $request)
 
 	return new Response($xml->outputMemory(),200,array('Content-Type'=>'text/xml'));
 });
+
+/**
+ * redirect trailing slash
+ */
+$app->get('/rss/',function(Application $app, Request $req) {
+	return $app->redirect('/rss');
+});
+
 //</editor-fold>
 
 /**
@@ -449,7 +449,6 @@ $app->get('/rss', function(Application $app, Request $request)
 $app->get('/{page}', function(Application $app, Request $request, $page)
 {
 	// template output
-	$out = array();
 	/* @var $page SimpleXMLElement */
 	$out = array(
 		'next' => $app['next'],
@@ -464,6 +463,7 @@ $app->get('/{page}', function(Application $app, Request $request, $page)
 		'isHome' => ($app['current'] == $app['homePage'])
 	);
 
+	$request->getBaseUrl();
 	/** @var $twig Twig_Environment */
 	$twig = $app['twig'];
 	return $twig->render('page.twig',$out);

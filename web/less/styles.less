@@ -1,19 +1,22 @@
+@import "normalize.less";
+@import "font-awesome";
+@import "baseType.less";
+
 * { -moz-box-sizing: border-box; -webkit-box-sizing: border-box; box-sizing: border-box; }
 
-@import "font-awesome";
-@import "normalize.less";
-@import "baseType.less";
+@baseFontSize: 16px;
 
 @darkAccent: #918a77;
 @mediumAccent: #b6b3aa;
 
 @backgroundColor: #f2f2ee;
+@altbackgroundColor: lighten(@backgroundColor,10%);
 @headerFontColor: #918a77;
 
-@headerWidth: 12em;
-@desktopContentLeftPad: 1.5rem;
 
-
+@headerWidth: 12rem;
+@sidebarWidth: 12rem;
+@contentPadding: 1.5rem;
 
 /* base styles */
 html, body {height: 100%;}
@@ -21,6 +24,48 @@ html, body {height: 100%;}
 body
 {
 	background-color: @backgroundColor;
+}
+
+header
+{
+	background-color: @altbackgroundColor;
+	border-bottom: .5em solid @mediumAccent;
+	padding: .5em;
+	line-height: 1;
+	h1
+	{
+		width: @headerWidth;
+		font-size: 1.5rem;
+		display: inline-block;
+		vertical-align: middle;
+		padding-left: 5rem;
+		margin: 0;
+		background-image: url('/css/images/logo.png');
+		background-position: left center;
+		background-size: auto 4rem;
+		background-repeat: no-repeat;
+	}
+	nav
+	{
+		display: inline-block;
+		vertical-align: middle;
+		line-height: 1;
+		margin-left: @contentPadding;
+		margin-bottom: 0;
+		ul
+		{
+			li
+			{
+				display: inline-block;
+				vertical-align: middle;
+				&:after
+				{
+					content: ' | ';
+				}
+				&:last-child:after {content: none;}
+			}
+		}
+	}
 }
 
 header, footer, h1, h2, h3, h4, h5, h6
@@ -40,6 +85,7 @@ nav
 
 nav.breadcrumb
 {
+	margin-top: @baseFontSize * 1.5rem;
 	margin-top: 1.5rem;
 	.universalMarginBottom;
 	ul
@@ -62,126 +108,322 @@ nav.breadcrumb
 	}
 }
 
-nav.pageNav
+aside
 {
 	position: fixed;
-	z-index: 2;
-	width: @headerWidth;
-	bottom: 3rem;
-	right: 0;
-	padding-left: 5rem;
-}
-
-/* desktop layout */
-header
-{
-	position: fixed;
-	z-index: 1;
-	top: 0;
-	right: 0;
-	height: 100%;
-	width: @headerWidth;
-	padding: .5em;
-
-	background-color: lighten(@backgroundColor,10);
-	border-left: .5em solid @darkAccent;
-	outline: .5em solid @mediumAccent;
-
-	h1
-	{
-		font-size: 1.5rem;
-		padding-left: 5rem;
-		background-image: url('/css/images/logo.png');
-		background-position: left center;
-		background-size: auto 4rem;
-		background-repeat: no-repeat;
-
-	}
-	nav
-	{
-		ul, li
-		{
-			margin-left: 0;
-			padding-left: 0;
-		}
-		ul
-		{
-			width: @headerWidth;
-			padding-left: 5rem;
-		}
-	}
-}
-
-footer
-{
-	.small;
-	.universalMarginBottom;
-	background-image: url('/css/images/abouthalfLogo.png');
-	background-position: bottom center;
-	background-repeat: no-repeat;
-	background-size: auto @headerWidth/4;
-
+	top: 7rem;
+	left: @contentPadding;
+	width: @sidebarWidth;
 	text-align: center;
-	padding-bottom: @headerWidth/4;
-	margin-right: @headerWidth + 2;
-}
 
-div.archives + footer
-{
-	margin-right: 0;
+	border: .25em solid @darkAccent;
+
+	a
+	{
+		width: 100%;
+		display: block;
+		img
+		{
+			display: block;
+			width: 100%;
+			height: auto;
+			border: .5em solid @mediumAccent;
+		}
+	}
+
+	a.closer {display: none}
+
+	&.modal
+	{
+		position: absolute;
+		top: 0;
+		left: 0;
+		z-index: 100;
+		width: 100%;
+		min-height: 100%;
+		background: @altbackgroundColor;
+		border: none;
+		padding: @contentPadding * 2;
+		a {float: none; border: none;}
+		img
+		{
+			border: none;
+			display: block;
+			width: 100%;
+			height: auto;
+		}
+		a.closer
+		{
+			position: absolute;
+			border: none;
+			top: 1rem;
+			right: 1rem;
+			display: block;
+			color: @baseTypeColor;
+		}
+	}
 }
 
 div.page,
 div.archives
 {
+	margin-top: @contentPadding;
 	margin-left: @headerWidth + 2;
 	margin-right: @headerWidth + 2;
 	padding-left: 1.5rem;
+	min-height: 20rem;
+	article
+	{
+		&:after
+		{
+			content: '✻';
+			display: block;
+			.universalMarginBottom;
+			.big;
+			color: @quietType;
+			text-align: center;
+		}
+		&:last-of-type:after {content: none;}
+	}
 }
 
 
-aside + div.page,
+aside + div.page
+{
+	margin: @contentPadding @contentPadding @contentPadding (@sidebarWidth + @contentPadding);
+}
+
 aside + div.page + footer
 {
-	margin-left: 40%;
+	margin-left: @sidebarWidth;
 }
 
-aside
+footer
 {
-	position: absolute;
-	top: 0;
-	width: 40%;
-	height: 100%;
-	border-right: .5em solid @darkAccent;
-	outline: .5em solid @mediumAccent;
+	.small;
 	a
 	{
-		margin: 0 auto;
 		display: block;
-		img
-		{
-			position: fixed;
-			max-width: 100%;
-			max-height: 100%;
+		background-image: url('/css/images/abouthalfLogo.png');
+		background-position: center bottom;
+		background-repeat: no-repeat;
+		background-size: auto @headerWidth/4;
+		padding-bottom: @headerWidth/4;
+	}
 
+	text-align: center;
+	padding: @contentPadding;
+
+}
+
+
+/* small screen */
+@media screen and (max-width: 37.5em)
+{
+	header
+	{
+		padding: .25rem;
+		.universalMarginBottom;
+		h1, nav {display: block;}
+		h1 {.universalMarginBottom;}
+	}
+
+	aside
+	{
+		position: static;
+		margin: 0 auto;
+		.universalMarginBottom;
+		a
+		{
+			img
+			{
+				margin: 0 auto;
+			}
+		}
+	}
+
+	div.page,
+	div.archives,
+	aside + div.page
+	{
+		min-height: auto;
+		padding: 0;
+		margin-left: @contentPadding;
+		margin-right: @contentPadding;
+	}
+
+	aside + div.page + footer
+	{
+		margin-left: 0;
+	}
+}
+
+/* wide screen */
+@media screen and (min-width: 60em)
+{
+
+	header
+	{
+		position: fixed;
+		top: 0;
+		right: 0;
+		z-index: 90;
+		width: @sidebarWidth;
+		border: none;
+		border-left: .5em solid @mediumAccent;
+		min-height: 100%;
+		h1, nav
+		{
+			display: block;
+			.universalMarginBottom;
+		}
+		nav
+		{
+			line-height: 1.5;
+			margin-left: 5rem;
+			ul
+			{
+				li
+				{
+					display: block;
+					&:after
+					{
+						content: none;
+					}
+				}
+			}
+		}
+	}
+
+	aside
+	{
+		position: fixed;
+		top: 0;
+		left: 0;
+		width: 40%;
+		height: 100%;
+		border: none;
+		border-right: .5em solid @mediumAccent;
+		background-color: @backgroundColor;
+		&.modal
+		{
+			height: auto;
+		}
+		a
+		{
+			text-align: right;
+			float: right;
+			height: 100%;
+			border-left: .5em solid darken(@backgroundColor,10%);
+			img
+			{
+				display: inline-block;
+				border: none;
+				border-right: .25em solid @darkAccent;
+				border-left: .25em solid @mediumAccent;
+
+				width: auto;
+				height: 100%;
+			}
+		}
+
+	}
+
+	div.page, div.archives
+	{
+		position: static;
+		margin: 0 @sidebarWidth 0 @sidebarWidth
+	}
+
+	aside + div.page,
+	aside + div.page + footer
+	{
+		width: 60%;
+		margin-left: 40%;
+		padding-left: @contentPadding;
+		padding-right: @headerWidth + @contentPadding;
+	}
+
+	article {max-width: 40em;} // readability!
+
+	nav.pageNav
+	{
+		position: fixed;
+		bottom: @contentPadding;
+		right: 0;
+		width: @sidebarWidth;
+		padding-left: 5rem;
+		z-index: 91;
+	}
+
+}
+
+/* IE 8 compat */
+.lt-ie9
+{
+	header
+	{
+
+		h1
+		{
+			font-size: @baseFontSize * 1.5rem;
+			width: @baseFontSize * (@headerWidth - 5);
+			//padding-left: @baseFontSize * 5rem;
+		}
+	}
+	aside
+	{
+		//position: static;
+		width: @baseFontSize * @sidebarWidth;
+		top: @baseFontSize * 7rem;
+		left: @baseFontSize * @contentPadding;
+		&.modal
+		{
+			position: absolute;
+			top: 0;
+			left: 0;
+			z-index: 100;
+			width: 100%;
+			min-height: 100%;
+			padding: @baseFontSize * @contentPadding * 2;
+			a.closer
+			{
+				width: @baseFontSize * 5rem;
+				top: 1em;
+				right: 1em;
+			}
+		}
+	}
+
+	div.page,
+	div.archives
+	{
+		margin-top: @baseFontSize * @contentPadding;
+		margin-left: @baseFontSize * (@headerWidth + 2);
+		margin-right: @baseFontSize * (@headerWidth + 2);
+		padding-left: @baseFontSize * 1.5rem;
+		min-height: @baseFontSize * 20rem;
+	}
+
+	aside + div.page
+	{
+		margin: (@baseFontSize * @contentPadding) (@baseFontSize * @sidebarWidth) (@baseFontSize * @contentPadding) ((@baseFontSize * @sidebarWidth) + 24px);
+	}
+
+	aside + div.page + footer
+	{
+		margin-left: @baseFontSize * @sidebarWidth;
+	}
+
+	footer
+	{
+		a
+		{
+			background: none;
 		}
 	}
 }
 
-// tablet portrait
-@media (max-width: 37.5em)
-{
-	body
-	{
-		color: blue;
-	}
-}
 
-// tablet landscape
-@media (max-width: 60em)
-{
-	body
-	{
-		color: red;
-	}
-}
+/* utilities */
+.hidden {display: none;}

@@ -9,6 +9,7 @@
 			{% if block('title') and not isHome %} : {% endif %}
 			{%  block title %}{% endblock %}
 		</title>
+		<link rel="alternate" type="application/rss+xml" title="{{ app.siteName }}" href="{{ app.baseUrl }}/rss">
 		<meta charset="utf-8">
 		{% block meta %}
 		<meta name="keywords" content="{{ app.defaultKeywords }}">
@@ -26,10 +27,19 @@
 			<nav>
 				<ul>
 					<li>
+						<a href="/">Home</a>
+					</li>
+					<li>
 						<a href="/blog/">Blog</a>
 					</li>
 					<li>
 						<a href="/about.html">About</a>
+					</li>
+					<li>
+						<a href="/rss">
+							RSS
+							<i class="icon-rss"></i>
+						</a>
 					</li>
 				</ul>
 			</nav>

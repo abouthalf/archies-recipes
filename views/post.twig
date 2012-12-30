@@ -9,36 +9,38 @@
 {%  endblock %}
 
 {% block content %}
-	<nav class="breadcrumb">
-		<ul>
-			<li>
-				<a href="/">Home</a>
-			</li>
-			<li>
-				<a href="/blog">Blog</a>
-			</li>
-			<li>
-				<a href="/blog/{{ year|url_encode }}">{{ year }}</a>
-			</li>
-			<li>
-				<a href="/blog/{{ year|url_encode }}/{{ month|url_encode }}">{{ month }}</a>
-			</li>
-			<li>
-				<a href="/blog/{{ year|url_encode }}/{{ month|url_encode }}/{{ day|url_encode }}">{{ day }}</a>
-			</li>
-			<li>
+	<div class="page">
+		<nav class="breadcrumb">
+			<ul>
+				<li>
+					<a href="/">Home</a>
+				</li>
+				<li>
+					<a href="/blog">Blog</a>
+				</li>
+				<li>
+					<a href="/blog/{{ year|url_encode }}">{{ year }}</a>
+				</li>
+				<li>
+					<a href="/blog/{{ year|url_encode }}/{{ month|url_encode }}">{{ month }}</a>
+				</li>
+				<li>
+					<a href="/blog/{{ year|url_encode }}/{{ month|url_encode }}/{{ day|url_encode }}">{{ day }}</a>
+				</li>
+				<li>
+					<a href="{{ permalink }}">
+						{{ post.head.title }}
+					</a>
+				</li>
+			</ul>
+		</nav>
+		<article>
+			<h1 class="post-title">
 				<a href="{{ permalink }}">
 					{{ post.head.title }}
 				</a>
-			</li>
-		</ul>
-	</nav>
-	<article>
-		<h1 class="post-title">
-			<a href="{{ permalink }}">
-				{{ post.head.title }}
-			</a>
-		</h1>
-		{{ post.body.asXML()|replace({'<body>':'','</body>':''})|raw }}
-	</article>
+			</h1>
+			{{ post.body.asXML()|replace({'<body>':'','</body>':''})|raw }}
+		</article>
+	</div>
 {% endblock %}

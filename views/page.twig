@@ -12,9 +12,13 @@
 
 {% block content %}
 	{% if image %}
-	<aside>
-		<a href="images/{{ image }}">
+	<aside data-role="modal">
+		<a href="images/{{ image }}" data-role="opener">
 			<img src="images/{{ image }}" alt="{{ title }}">
+		</a>
+		<a href="#" class="closer" data-role="closer">
+			<i class="icon-remove-sign"></i>
+			close
 		</a>
 	</aside>
 	{% endif %}
@@ -28,7 +32,7 @@
 			</ul>
 		</nav>
 		<article>
-			{{ body|replace({'<body>':'','</body>':''}) }}
+			{{ body|replace({'<body>':'','</body>':''})|raw }}
 		</article>
 		{% include '_pageNav.twig' %}
 	</div>

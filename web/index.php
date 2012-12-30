@@ -69,7 +69,7 @@ $loadPageXML = function($page) use ($app)
 function getPageContent($page)
 {
 	$f = __DIR__. '/../html/'.$page;
-	$h = fopen($f,'rb');
+	$h = @fopen($f,'rb');
 	if ($h === false) {
 		throw new Exception('content file not found');
 	}

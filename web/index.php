@@ -389,12 +389,15 @@ $app->get('/rss', function(Application $app, Request $request)
 	$xml->writeAttribute('version', '2.0');
 	$xml->writeAttribute('xmlns:atom', 'http://www.w3.org/2005/Atom');
 	$xml->writeAttribute('xmlns:content','http://purl.org/rss/1.0/modules/content/');
+
 	$xml->startElement("channel");
+	$xml->writeElement('title', $app['siteName']);
+
 	$xml->startElementNs('atom','link',null);
 	$xml->writeAttribute('href',$app['baseUrl'].'/rss');
 	$xml->writeAttribute('rel','self');
 	$xml->endElement(); // atom:link
-	$xml->writeElement('title', $app['siteName']);
+
 	$xml->writeElement('description', $app['defaultKeywords']);
 	$xml->writeElement('link','http://'.$_SERVER['SERVER_NAME']);
 	$xml->writeElement('pubDate', $now->format(DATE_RSS));

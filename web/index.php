@@ -102,11 +102,17 @@ function getMedia($pageName, $app)
 			$prev = '';
 			if ($p = $pages[$i-1])
 			{
-				$prev = $p->name;
+				if (file_exists(__DIR__.'/../html/'.$p->name))
+				{
+					$prev = $p->name;
+				}
 			}
 			if ($n = $pages[$i+1])
 			{
-				$next = $n->name;
+				if (file_exists(__DIR__.'/../html/'.$n->name))
+				{
+					$next = $n->name;
+				}
 			}
 			$app['image'] = $image;
 			$app['next'] = $next;

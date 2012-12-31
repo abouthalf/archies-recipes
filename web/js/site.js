@@ -7,7 +7,8 @@ $(
 		$('a[data-role=opener]').click(
 			function(e)
 			{
-				$(this).parent('[data-role=modal]').toggleClass('modal');
+				var $p = $(this).parent('[data-role=modal]');
+				$p.toggleClass('modal');
 				e.preventDefault();
 			}
 		);
@@ -15,7 +16,7 @@ $(
 		$('a[data-role=closer]').click(
 			function(e)
 			{
-				$(this).parent('[data-role=modal]').removeClass('modal');
+				$(this).parent('[data-role=modal]').removeClass('modal').css('height','auto');
 				e.preventDefault();
 			}
 		);
@@ -23,7 +24,7 @@ $(
 		$(window).keyup(function(e){
 			if (e.which == 27)
 			{
-				$('[data-role=modal]').removeClass('modal');
+				$('a[data-role=closer]').trigger('click');
 			}
 		});
 	}

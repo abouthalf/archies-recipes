@@ -108,6 +108,15 @@ nav.breadcrumb
 	}
 }
 
+nav.pageNav
+{
+	position: fixed;
+	left: @contentPadding;
+	top: @sidebarWidth + 15rem;
+	.big;
+	line-height: 1.5;
+}
+
 aside
 {
 	position: fixed;
@@ -141,10 +150,11 @@ aside
 		z-index: 100;
 		width: 100%;
 		min-height: 100%;
+		margin-bottom: 0;
 		background: @altbackgroundColor;
 		border: none;
 		padding: @contentPadding * 2;
-		a {float: none; border: none;}
+		a {float: none; border: none; width: auto;}
 		img
 		{
 			border: none;
@@ -217,6 +227,18 @@ footer
 }
 
 
+
+/* skinny wide monitors, netbooks, kindle fire */
+@media screen and (max-height: 30em)
+{
+// on smallish widish monitors, un-fix elements so they scroll with the page.
+	aside,
+	nav.pageNav
+	{
+		position: absolute;
+	}
+}
+
 /* small screen */
 @media screen and (max-width: 37.5em)
 {
@@ -242,6 +264,8 @@ footer
 		}
 	}
 
+	nav.pageNav {position: static;}
+
 	div.page,
 	div.archives,
 	aside + div.page
@@ -258,8 +282,10 @@ footer
 	}
 }
 
+
+
 /* wide screen */
-@media screen and (min-width: 60em)
+@media screen and (min-width: 64em) and (min-height: 37.5em)
 {
 
 	header
@@ -308,6 +334,12 @@ footer
 		&.modal
 		{
 			height: auto;
+			margin-bottom: 0;
+			a
+			{
+				height: auto;
+				width: auto;
+			}
 		}
 		a
 		{
@@ -348,11 +380,15 @@ footer
 
 	nav.pageNav
 	{
+		.big;
+		line-height: 1.5; // reset line height for clickability
 		position: fixed;
-		bottom: @contentPadding;
+		left: auto;
+		top: auto;
+		bottom: 30%;
 		right: 0;
 		width: @sidebarWidth;
-		padding-left: 5rem;
+		padding-left: 3rem;
 		z-index: 91;
 	}
 
@@ -393,6 +429,11 @@ footer
 				right: 1em;
 			}
 		}
+	}
+
+	nav.pageNav
+	{
+		top: @baseFontSize * ( @sidebarWidth + 15 );
 	}
 
 	div.page,

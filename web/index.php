@@ -195,7 +195,7 @@ function buildPubDateFromFileName($name,$app)
 		$month = $matches[2];
 		$day = $matches[3];
 	}
-	elseif(preg_match($dateTimePattern,$page,$matches))
+	elseif(preg_match($dateTimePattern,$name,$matches))
 	{
 		$year = $matches[1];
 		$month = $matches[2];
@@ -408,13 +408,15 @@ $app->get('/rss', function(Application $app, Request $request)
 
 	// ignore dot-files and not-html-files
 	$files = array_values(array_filter($files,function($f) {
-			return preg_match('/^.*\.html$/',$f);
-		}));
+				return preg_match('/^.*\.html$/',$f);
+			}));
+
+	$totalFiles = (count($files) > $app['postsPerPage']) ? $app['postsPerPage'] : count($files);
 
 	// build items
-	for($i = 0; $i < 10; $i++)
+	for($i = 0; $i < $totalFiles; $i++)
 	{
-		$file = $files[0];
+		$file = $files[$i];
 		$post = getPageContent('blog/'.$file);
 		$body = $post->body->asXML();
 		$body = str_replace('<body>','',$body);
@@ -432,7 +434,6 @@ $app->get('/rss', function(Application $app, Request $request)
 		$xml->startElementNs('content','encoded',null);
 			$xml->writeCdata($body);
 		$xml->endElement();//content:encoded
-
 		$xml->endElement();// item
 	}
 

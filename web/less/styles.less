@@ -125,12 +125,15 @@ aside
 	width: @sidebarWidth;
 	text-align: center;
 
-	border: .25em solid @darkAccent;
-
 	a
 	{
 		width: 100%;
 		display: block;
+		position: relative;
+		max-height: 300px;
+		overflow: hidden;
+		border: .25em solid @darkAccent;
+		&:focus {outline: none;}
 		img
 		{
 			display: block;
@@ -138,6 +141,25 @@ aside
 			height: auto;
 			border: .5em solid @mediumAccent;
 		}
+		span
+		{
+			position: absolute;
+			bottom: @baseFontSize;
+			bottom: 1rem;
+			opacity: 0;
+			left: 0;
+			width: 100%;
+			display: block;
+			text-align: center;
+			color: @altbackgroundColor;
+			text-shadow: 0 2px 3px @darkAccent;
+			-webkit-transition: opacity 250ms ease-in-out;
+			-moz-transition: opacity 250ms ease-in-out;
+			-ms-transition: opacity 250ms ease-in-out;
+			-o-transition: opacity 250ms ease-in-out;
+			transition: opacity 250ms ease-in-out;
+		}
+		&:hover span {opacity: 1;}
 	}
 
 	a.closer {display: none}
@@ -145,8 +167,11 @@ aside
 	&.modal
 	{
 		position: absolute;
+		// reset all positions
 		top: 0;
 		left: 0;
+		bottom: auto;
+		right: auto;
 		z-index: 100;
 		width: 100%;
 		min-height: 100%;
@@ -154,13 +179,25 @@ aside
 		background: @altbackgroundColor;
 		border: none;
 		padding: @contentPadding * 2;
-		a {float: none; border: none; width: auto;}
+		a {
+			float: none;
+			border: none;
+			width: auto;
+			max-height: none;
+			overflow: visible;
+			span
+			{
+				display: none;
+			}
+		}
 		img
 		{
 			border: none;
 			display: block;
 			width: 100%;
 			height: auto;
+			max-height: none;
+//			max-width: none;
 		}
 		a.closer
 		{
@@ -347,8 +384,8 @@ footer
 		left: 0;
 		width: 40%;
 		height: 100%;
+		padding: 3rem 0;
 		border: none;
-		border-right: .5em solid @mediumAccent;
 		background-color: @backgroundColor;
 		&.modal
 		{
@@ -358,23 +395,35 @@ footer
 			{
 				height: auto;
 				width: auto;
+				img
+				{
+					max-width: none;
+					max-height: none;
+				}
 			}
 		}
 		a
 		{
 			text-align: right;
-			float: right;
 			height: 100%;
-			border-left: .5em solid darken(@backgroundColor,10%);
+			border: none;
+			max-height: none;
 			img
 			{
-				display: inline-block;
-				border: none;
-				border-right: .25em solid @darkAccent;
-				border-left: .25em solid @mediumAccent;
-
+				display: inline;
 				width: auto;
-				height: 100%;
+				height: auto;
+				min-height: 1em;
+				max-width: 100%;
+				max-height: 100%;
+			}
+			span
+			{
+				right: 1rem;
+				bottom: 1rem;
+				left: auto;
+				width: auto;
+				display: inline;
 			}
 		}
 
@@ -452,7 +501,8 @@ footer
 
 	nav.pageNav
 	{
-		top: @baseFontSize * ( @sidebarWidth + 15 );
+		top: @baseFontSize * ( @sidebarWidth + 16 );
+		left: 1.5 * @baseFontSize;
 	}
 
 	div.page,

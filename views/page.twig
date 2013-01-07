@@ -14,7 +14,10 @@
 	{% if image %}
 	<aside data-role="modal">
 		<a href="images/{{ image }}" data-role="opener">
-			<img src="images/{{ image }}" alt="{{ title }}">
+			<img src="images/{{ image }}" alt="{{ title }}" />
+			<span>
+				<i class="icon-zoom-in"></i> Enlarge
+			</span>
 		</a>
 		<a href="#" class="closer" data-role="closer">
 			<i class="icon-remove-sign"></i>

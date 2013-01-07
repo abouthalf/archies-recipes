@@ -297,6 +297,8 @@ aside.modal img{border:none;display:block;width:100%;height:auto;}
 aside.modal a.closer{position:absolute;border:none;top:1rem;right:1rem;display:block;color:#444444;}
 div.page,div.archives{margin-top:1.5rem;margin-left:14rem;margin-right:14rem;padding-left:1.5rem;min-height:20rem;}div.page article:after,div.archives article:after{content:'✻';display:block;margin-top:0;margin-bottom:24px;margin-bottom:1.5rem;font-size:24px;font-size:1.5rem;line-height:1;color:#dddddd;text-align:center;}
 div.page article:last-of-type:after,div.archives article:last-of-type:after{content:none;}
+div.page article table,div.archives article table{width:100%;}div.page article table tr td,div.archives article table tr td,div.page article table tr th,div.archives article table tr th{border-bottom:1px solid #ffffff;}
+div.page article table tr:last-child td,div.archives article table tr:last-child td,div.page article table tr:last-child th,div.archives article table tr:last-child th{border:none;}
 aside+div.page{margin:1.5rem 1.5rem 1.5rem 13.5rem;}
 aside+div.page+footer{margin-left:12rem;}
 footer{font-size:14px;font-size:0.875rem;line-height:1.714;text-align:center;padding:1.5rem;}footer a{display:block;background-image:url('/css/images/abouthalfLogo.png');background-position:center bottom;background-repeat:no-repeat;background-size:auto 3rem;padding-bottom:3rem;}

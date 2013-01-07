@@ -194,6 +194,25 @@ div.archives
 			text-align: center;
 		}
 		&:last-of-type:after {content: none;}
+
+		table
+		{
+			width: 100%;
+			tr
+			{
+				td, th
+				{
+					border-bottom: 1px solid @altbackgroundColor;
+				}
+				&:last-child
+				{
+					td, th
+					{
+						border: none;
+					}
+				}
+			}
+		}
 	}
 }
 

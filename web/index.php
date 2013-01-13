@@ -55,13 +55,6 @@ $app->register( new Silex\Provider\ValidatorServiceProvider());
 $app->register(new FormServiceProvider());
 
 /**
- * Mail service
- */
-$app->register(new SwiftmailerServiceProvider(),array(
-
-	));
-
-/**
  * Translator service (for Form)
  */
 $app->register(new Silex\Provider\TranslationServiceProvider(), array(
@@ -543,7 +536,12 @@ $app->post('/contact', function(Application $app, Request $request)
 		$mail->setSubject($data['subject']);
 		$mail->setFrom($data['from']);
 		$mail->setBody($data['message']);
-		$app['mailer']->send($mail);
+		$mail->setTo(array($app['email']));
+
+		$t = Swift_MailTransport::newInstance();
+		$mailer = Swift_Mailer::newInstance($t);
+		$mailer->send($mail);
+
 		return $app->redirect('/contact/thankyou');
 	}
 

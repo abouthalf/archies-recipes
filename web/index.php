@@ -541,7 +541,7 @@ $app->post('/contact', function(Application $app, Request $request)
 //		$mailer = Swift_Mailer::newInstance($t);
 //		$mailer->send($mail);
 
-		$headers = "From: ".$data['from']."\r\n".
+		$headers = "From: ".$app['email']."\r\n".
 			"Reply-To: ". $data['from'] . "\r\n" .
 			"X-Mailer: PHP/" . phpversion();
 

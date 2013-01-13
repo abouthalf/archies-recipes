@@ -1,0 +1,22 @@
+{% extends 'layout.twig' %}
+
+{% block title %}{{ title }}{% endblock %}
+
+{% block content %}
+	<div class="page">
+		<nav class="breadcrumb">
+			<ul>
+				<li><a href="/">Home</a></li>
+				<li><a href="/contact">Contact</a></li>
+			</ul>
+		</nav>
+		<article>
+			<h1>Contact</h1>
+			<p>Questions or comments? Please drop me a line.</p>
+			<form action="#" method="post">
+				{{ form_widget(form.createView()) }}
+				<input type="submit" value="Send" />
+			</form>
+		</article>
+	</div>
+{% endblock %}

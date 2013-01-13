@@ -63,6 +63,7 @@
 		<footer>
 			<a href="http://abouthalf.com" target="_blank">Brought to you by Abouthalf.com</a>
 		</footer>
+		{% if not app.debug %}
 		<script type="text/javascript">
 
 			var _gaq = _gaq || [];
@@ -76,5 +77,6 @@
 			})();
 
 		</script>
+		{% endif %}
 	</body>
 </html>

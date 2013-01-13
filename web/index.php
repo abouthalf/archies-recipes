@@ -6,6 +6,12 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\HttpKernelInterface;
 use Silex\Provider\TwigServiceProvider;
+use Symfony\Component\Validator\Constraints as Assert;
+use Silex\Provider\FormServiceProvider;
+use Silex\Provider\SwiftmailerServiceProvider;
+use Symfony\Component\Form\FormFactory;
+use Swift_Message as Mail;
+
 use Silex\Application;
 
 $app = new Silex\Application();
@@ -19,6 +25,7 @@ $app['defaultKeywords'] = "Great grandfather's recipe book archive";
 $app['postsPerPage'] = 10;
 $app['timezone'] = 'America/Los_Angeles';
 $app['baseUrl'] = 'http://'.$_SERVER['SERVER_NAME'];
+$app['email'] = 'mb@archiesrecipes.com';
 
 /**
  * Register providers
@@ -37,6 +44,27 @@ $app->register(new TwigServiceProvider(), array(
 		)
 	));
 
+/**
+ * Validator service
+ */
+$app->register( new Silex\Provider\ValidatorServiceProvider());
+
+/**
+ * Form service
+ */
+$app->register(new FormServiceProvider());
+
+/**
+ * Mail service
+ */
+$app->register(new SwiftmailerServiceProvider());
+
+/**
+ * Translator service (for Form)
+ */
+$app->register(new Silex\Provider\TranslationServiceProvider(), array(
+		'locale_fallback' => 'en',
+	));
 
 // set timezone
 date_default_timezone_set($app['timezone']);
@@ -215,6 +243,38 @@ function buildPubDateFromFileName($name,$app)
 
 	return $date->format(DATE_RSS);
 }
+
+/**
+ *
+ * @return Symfony\Component\Form\Form
+ */
+$app['contact'] = function($app)
+{
+	if (!isset($app['contact.form']))
+	{
+		$defaults = array('subject' => 'Feedback');
+
+		/* @var $ff FormFactory */
+		$ff = $app['form.factory'];
+		$app['contact.form'] = $ff->createBuilder('form',$defaults)
+			->add('from','email', array(
+				'constraints' => array(
+					new Assert\NotBlank(),
+					new Assert\Email()
+				),
+				'attr' => array('placeholder','your email')
+			))
+			->add('subject','text',array(
+				'constraints' => array(
+					new Assert\NotBlank()
+				)
+			))
+			->add('message','textarea',array(
+				'constraints'=> array(new Assert\NotBlank())
+			))->getForm();
+	}
+	return $app['contact.form'];
+};
 
 /**
  * Controllers
@@ -453,6 +513,44 @@ $app->get('/rss/',function(Application $app, Request $req) {
 //</editor-fold>
 
 /**
+ * Contact form controllers
+ */
+$app->get('/contact/{message}', function(Application $app, Request $request, $message)
+{
+	$out = array();
+	$out['form'] = $app['contact'];
+
+	/** @var $twig Twig_Environment */
+	$twig = $app['twig'];
+	return $twig->render('contact.twig',$out);
+
+})->value('message','');
+
+$app->post('/contact', function(Application $app, Request $request)
+{
+	$out = array();
+	/* @var $form Symfony\Component\Form\Form */
+	$out['form'] = $form = $app['contact'];
+
+	$form->bind($request);
+
+	if ($form->isValid())
+	{
+		$data = $form->getData();
+		$mail = Mail::newInstance();
+		$mail->setSubject($data['subject']);
+		$mail->setFrom($data['from']);
+		$mail->setBody($data['message']);
+		$app['mailer']->send($mail);
+		return $app->redirect('/contact/thankyou');
+	}
+
+	/** @var $twig Twig_Environment */
+	$twig = $app['twig'];
+	return $twig->render('contact.twig',$out);
+});
+
+/**
  * main page controller, look up and load pageName from content directory
  *
  */
@@ -473,7 +571,6 @@ $app->get('/{page}', function(Application $app, Request $request, $page)
 		'isHome' => ($app['current'] == $app['homePage'])
 	);
 
-	$request->getBaseUrl();
 	/** @var $twig Twig_Environment */
 	$twig = $app['twig'];
 	return $twig->render('page.twig',$out);

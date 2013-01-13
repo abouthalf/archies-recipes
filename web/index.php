@@ -263,6 +263,12 @@ $app['contact'] = function($app)
 					new Assert\NotBlank()
 				)
 			))
+			->add('spam','text',array(
+				'constraints' => array(
+					new Assert\Regex(array('pattern'=>'/^no$/i'))
+				),
+				'label' => 'Are you a robot? (humans answer "no")'
+			))
 			->add('message','textarea',array(
 				'constraints'=> array(new Assert\NotBlank())
 			))->getForm();
@@ -513,6 +519,12 @@ $app->get('/contact/{message}', function(Application $app, Request $request, $me
 {
 	$out = array();
 	$out['form'] = $app['contact'];
+	$out['thankyou'] = false;
+
+	if ($message === 'thankyou')
+	{
+		$out['thankyou'] = true;
+	}
 
 	/** @var $twig Twig_Environment */
 	$twig = $app['twig'];
@@ -531,15 +543,6 @@ $app->post('/contact', function(Application $app, Request $request)
 	if ($form->isValid())
 	{
 		$data = $form->getData();
-//		$mail = Mail::newInstance();
-//		$mail->setSubject($data['subject']);
-//		$mail->setFrom($data['from']);
-//		$mail->setBody($data['message']);
-//		$mail->setTo($app['email']);
-
-//		$t = Swift_MailTransport::newInstance();
-//		$mailer = Swift_Mailer::newInstance($t);
-//		$mailer->send($mail);
 
 		$headers = "From: ".$app['email']."\r\n".
 			"Reply-To: ". $data['from'] . "\r\n" .
@@ -547,7 +550,7 @@ $app->post('/contact', function(Application $app, Request $request)
 
 		$sent = mail($app['email'],$data['subject'],strip_tags($data['message']),$headers);
 
-		return $app->redirect('/contact/thankyou'.$sent);
+		return $app->redirect('/contact/thankyou');
 	}
 
 	/** @var $twig Twig_Environment */

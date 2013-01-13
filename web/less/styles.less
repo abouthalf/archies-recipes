@@ -281,6 +281,74 @@ footer
 
 }
 
+/* Forms */
+form
+{
+	label
+	{
+		display: block;
+		&.required:after
+		{
+			content: '*';
+			color: #600;
+		}
+	}
+	input[type=text],
+	input[type=email],
+	textarea
+	{
+		font-family: Helvetica, Arial, sans-serif;
+		color: @mediumAccent;
+		width: 90%;
+		.big;
+		padding: 12px;
+		padding: .5rem;
+		border: 1px solid @mediumAccent;
+		display: block;
+		.universalMarginBottom;
+	}
+	textarea
+	{
+		min-height: 192px;
+		min-height: 8rem;
+		resize: vertical;
+	}
+	input[type=submit]
+	{
+		border: 0;
+		-webkit-border-radius: .25rem;
+		border-radius: 25rem;
+		background: @darkAccent;
+		color: @altbackgroundColor;
+		padding: 12px 24px;
+		padding: .5rem 1rem;
+		&:hover
+		{
+			background: lighten(@darkAccent,20)
+		}
+		&:active
+		{
+			background: darken(@darkAccent,10);
+		}
+	}
+
+	div
+	{
+		ul
+		{
+			margin-left: 0;
+			padding-left: 0;
+			li
+			{
+				list-style: none;
+				color: #600;
+				font-weight: bold;
+				font-style: italic;
+			}
+		}
+	}
+
+}
 
 
 /* skinny wide monitors, netbooks, kindle fire */

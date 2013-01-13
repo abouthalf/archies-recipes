@@ -11,12 +11,18 @@
 			</ul>
 		</nav>
 		<article>
-			<h1>Contact</h1>
-			<p>Questions or comments? Please drop me a line.</p>
-			<form action="/contact" method="post">
-				{{ form_widget(form.createView()) }}
-				<input type="submit" value="Send" />
-			</form>
+			{% if thankyou %}
+				<h1>Thank you!</h1>
+				<p>Thank you for getting in touch.</p>
+				<p><a href="/index.html">Home</a></p>
+			{% else %}
+				<h1>Contact</h1>
+				<p>Questions or comments? Please drop me a line.</p>
+				<form action="/contact" method="post">
+					{{ form_widget(form.createView()) }}
+					<input type="submit" value="Send" />
+				</form>
+			{% endif %}
 		</article>
 	</div>
 {% endblock %}

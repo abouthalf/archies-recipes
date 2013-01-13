@@ -8,7 +8,6 @@ use Symfony\Component\HttpKernel\HttpKernelInterface;
 use Silex\Provider\TwigServiceProvider;
 use Symfony\Component\Validator\Constraints as Assert;
 use Silex\Provider\FormServiceProvider;
-use Silex\Provider\SwiftmailerServiceProvider;
 use Symfony\Component\Form\FormFactory;
 use Swift_Message as Mail;
 
@@ -532,15 +531,21 @@ $app->post('/contact', function(Application $app, Request $request)
 	if ($form->isValid())
 	{
 		$data = $form->getData();
-		$mail = Mail::newInstance();
-		$mail->setSubject($data['subject']);
-		$mail->setFrom($data['from']);
-		$mail->setBody($data['message']);
-		$mail->setTo(array($app['email']));
+//		$mail = Mail::newInstance();
+//		$mail->setSubject($data['subject']);
+//		$mail->setFrom($data['from']);
+//		$mail->setBody($data['message']);
+//		$mail->setTo($app['email']);
 
-		$t = Swift_MailTransport::newInstance();
-		$mailer = Swift_Mailer::newInstance($t);
-		$mailer->send($mail);
+//		$t = Swift_MailTransport::newInstance();
+//		$mailer = Swift_Mailer::newInstance($t);
+//		$mailer->send($mail);
+
+		$headers = "From: ".$data['from']."\r\n".
+			"Reply-To: ". $data['from'] . "\r\n" .
+			"X-Mailer: PHP/" . phpversion();
+
+		$sent = mail($app['email'],$data['subject'],strip_tags($data['message']),$headers);
 
 		return $app->redirect('/contact/thankyou');
 	}

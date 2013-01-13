@@ -57,7 +57,9 @@ $app->register(new FormServiceProvider());
 /**
  * Mail service
  */
-$app->register(new SwiftmailerServiceProvider());
+$app->register(new SwiftmailerServiceProvider(),array(
+
+	));
 
 /**
  * Translator service (for Form)

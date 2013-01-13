@@ -547,7 +547,7 @@ $app->post('/contact', function(Application $app, Request $request)
 
 		$sent = mail($app['email'],$data['subject'],strip_tags($data['message']),$headers);
 
-		return $app->redirect('/contact/thankyou');
+		return $app->redirect('/contact/thankyou'.$sent);
 	}
 
 	/** @var $twig Twig_Environment */

@@ -302,6 +302,7 @@ div.page,div.archives{margin-top:1.5rem;margin-left:14rem;margin-right:14rem;pad
 div.page article:last-of-type:after,div.archives article:last-of-type:after{content:none;}
 div.page article table,div.archives article table{width:100%;}div.page article table tr td,div.archives article table tr td,div.page article table tr th,div.archives article table tr th{border-bottom:1px solid #ffffff;}
 div.page article table tr:last-child td,div.archives article table tr:last-child td,div.page article table tr:last-child th,div.archives article table tr:last-child th{border:none;}
+div.page article ul{-moz-column-count:2;-moz-column-gap:1rem;-webkit-column-count:2;-webkit-column-gap:1rem;column-count:2;column-gap:1rem;margin-left:0;padding:0;}div.page article ul li{padding-left:1rem;list-style-position:inside;}
 aside+div.page{margin:1.5rem 1.5rem 1.5rem 13.5rem;}
 aside+div.page+footer{margin-left:12rem;}
 footer{font-size:14px;font-size:0.875rem;line-height:1.714;text-align:center;padding:1.5rem;}footer a{display:block;background-image:url('/css/images/abouthalfLogo.png');background-position:center bottom;background-repeat:no-repeat;background-size:auto 3rem;padding-bottom:3rem;}

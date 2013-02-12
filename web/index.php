@@ -10,6 +10,7 @@ use Symfony\Component\Validator\Constraints as Assert;
 use Silex\Provider\FormServiceProvider;
 use Symfony\Component\Form\FormFactory;
 use Swift_Message as Mail;
+use Abouthalf\SearchProvider;
 
 use Silex\Application;
 
@@ -58,6 +59,14 @@ $app->register(new FormServiceProvider());
  */
 $app->register(new Silex\Provider\TranslationServiceProvider(), array(
 		'locale_fallback' => 'en',
+	));
+
+/**
+ * Search service
+ * */
+$app->register(new Abouthalf\SearchProvider(), array(
+		'search.index' => __DIR__.'/../data/search_index',
+		'search.content' => __DIR__. '/../html'
 	));
 
 // set timezone
@@ -239,7 +248,9 @@ function buildPubDateFromFileName($name,$app)
 }
 
 /**
+ * Generate contact form service
  *
+ * @param Application $app
  * @return Symfony\Component\Form\Form
  */
 $app['contact'] = function($app)
@@ -280,7 +291,6 @@ $app['contact'] = function($app)
  * Controllers
  *
  */
-
 
 //<editor-fold desc="Blog controllers">
 /**
@@ -428,7 +438,6 @@ $app->get('/blog/', function(Application $app, Request $request)
 });
 //</editor-fold>
 
-
 //<editor-fold desc="RSS Controller">
 /**
  * RSS controller.
@@ -512,6 +521,7 @@ $app->get('/rss/',function(Application $app, Request $req) {
 
 //</editor-fold>
 
+//<editor-fold desc="ContactForm">
 /**
  * Contact form controllers
  */
@@ -556,6 +566,27 @@ $app->post('/contact', function(Application $app, Request $request)
 	/** @var $twig Twig_Environment */
 	$twig = $app['twig'];
 	return $twig->render('contact.twig',$out);
+});
+//</editor-fold>
+
+/**
+ * Search controller
+ *
+ */
+$app->get('/search', function(Application $app, Request $request)
+{
+	$query = $request->get('q',null);
+	$out = array();
+	$out['query'] = $query;
+	if ($query)
+	{
+		$search = $app['search'];
+		$out['hits'] = $search($query);
+	}
+
+	/** @var $twig Twig_Environment */
+	$twig = $app['twig'];
+	return $twig->render('search.twig',$out);
 });
 
 /**

@@ -1,0 +1,46 @@
+{% extends 'layout.twig' %}
+
+
+{% block title %}Search{% endblock %}
+
+
+
+{% block content %}
+
+	<div class="archives">
+		<nav class="breadcrumb">
+			<ul>
+				<li>
+					<a href="/">Home</a>
+				</li>
+				<li>
+					<a href="/search">Search</a>
+				</li>
+			</ul>
+		</nav>
+		<article>
+			<h1>Search results</h1>
+			<h2>Pages and blog posts matching:<br />“{{ query }}”</h2>
+			<ul>
+				{% for hit in hits %}
+				<li>
+					<a href="{{ hit.url }}">
+						{{ hit.title}}
+					</a>
+					{% if hit.type == 'blog' %}
+						(From the blog)
+					{% else %}
+						(From the site)
+					{% endif %}
+				</li>
+				{% endfor %}
+			</ul>
+
+		</article>
+
+
+
+
+	</div>
+
+{% endblock %}

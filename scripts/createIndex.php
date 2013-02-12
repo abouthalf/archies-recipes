@@ -2,8 +2,6 @@
 
 require_once __DIR__.'/../vendor/autoload.php';
 
-//set_include_path()
-
 define('SEARCH_INDEX',__DIR__.'/../data/search_index');
 define('HTML_PAGES',__DIR__.'/../html');
 define('HTML_BLOGS',__DIR__.'/../html/blog');

@@ -20,7 +20,10 @@
 				<p>Questions or comments? Please drop me a line.</p>
 				<form action="/contact" method="post">
 					{{ form_widget(form.createView()) }}
-					<input type="submit" value="Send" />
+					<button type="submit">
+						<i class="icon-envelope"></i>
+						Send
+					</button>
 				</form>
 			{% endif %}
 		</article>

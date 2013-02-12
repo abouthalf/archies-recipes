@@ -19,6 +19,7 @@
 			</ul>
 		</nav>
 		<article>
+			{% if hits %}
 			<h1>Search results</h1>
 			<h2>Pages and blog posts matching:<br />“{{ query }}”</h2>
 			<ul>
@@ -35,6 +36,21 @@
 				</li>
 				{% endfor %}
 			</ul>
+			{% endif %}
+
+			<h1>Search the site</h1>
+			<form action="/search" method="get">
+				<label>
+					Search recipes, blog posts, and site content
+				</label>
+				<div id="form">
+					<input type="text" name="q" placeholder="e.g. Angel food cake">
+				</div>
+				<button type="submit">
+					<i class="icon-search"></i>
+					Search
+				</button>
+			</form>
 
 		</article>
 

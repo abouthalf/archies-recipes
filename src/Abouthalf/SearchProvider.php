@@ -31,7 +31,7 @@ class SearchProvider implements ServiceProviderInterface
 	{
 
 		$app[self::SEARCH_PROVIDER] = $app->protect(function($query) use ($app) {
-			$indexPath = $app[self::SEARCH_INDEX];
+			$indexPath = $app[SearchProvider::SEARCH_INDEX];
 			if (!$indexPath)
 			{
 				throw new Exception(__CLASS__. ' requires a valid search.index path');

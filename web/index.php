@@ -64,9 +64,8 @@ $app->register(new Silex\Provider\TranslationServiceProvider(), array(
 /**
  * Search service
  * */
-$app->register(new Abouthalf\SearchProvider(), array(
-		'search.index' => __DIR__.'/../data/search_index',
-		'search.content' => __DIR__. '/../html'
+$app->register(new SearchProvider(), array(
+		SearchProvider::SEARCH_INDEX => __DIR__.'/../data/search_index'
 	));
 
 // set timezone
@@ -577,11 +576,10 @@ $app->get('/search', function(Application $app, Request $request)
 {
 	$query = $request->get('q',null);
 	$out = array();
-	$out['query'] = $query;
+	$out['query'] = str_replace('"','',$query);
 	if ($query)
 	{
-		$search = $app['search'];
-		$out['hits'] = $search($query);
+		$out['hits'] = $app[SearchProvider::SEARCH_PROVIDER]($query);
 	}
 
 	/** @var $twig Twig_Environment */

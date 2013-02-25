@@ -33,7 +33,7 @@ $idx = Lucene::create(SEARCH_INDEX);
 $d = opendir(HTML_PAGES);
 while($d && ($file = readdir($d)) !== false)
 {
-	if (!is_dir($file) && (strpos($file,'.') !== 0) && strpos($file,'.html'))
+	if (!is_dir($file) && (strpos($file,'.') !== 0) && (strpos($file,'.html') == strlen($file) - 5))
 	{
 		echo 'Indexing: '.$file.PHP_EOL;
 		$path = '/'.$file;

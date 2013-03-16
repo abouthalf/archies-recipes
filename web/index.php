@@ -402,7 +402,7 @@ $app->get('/blog/{year}/{month}/{day}/{id}', function(Application $app, Request 
 $app->get('/blog/{year}/{month}/{day}/',function(Application $app, Request $request, $year, $month, $day)
 {
 	$path = sprintf('/blog/%s/%s/%s',$year, $month, $day);
-	$subRequest = Request::create($path, 'GET');
+	$subRequest = Request::create($path, 'GET',$_GET);
 	return $app->handle($subRequest, HttpKernelInterface::SUB_REQUEST);
 });
 
@@ -412,7 +412,7 @@ $app->get('/blog/{year}/{month}/{day}/',function(Application $app, Request $requ
 $app->get('/blog/{year}/{month}/',function(Application $app, Request $request, $year, $month)
 {
 	$path = sprintf('/blog/%s/%s',$year, $month);
-	$subRequest = Request::create($path, 'GET');
+	$subRequest = Request::create($path, 'GET',$_GET);
 	return $app->handle($subRequest, HttpKernelInterface::SUB_REQUEST);
 });
 
@@ -421,8 +421,9 @@ $app->get('/blog/{year}/{month}/',function(Application $app, Request $request, $
  */
 $app->get('/blog/{year}/',function(Application $app, Request $request, $year)
 {
+
 	$path = sprintf('/blog/%s',$year);
-	$subRequest = Request::create($path, 'GET');
+	$subRequest = Request::create($path, 'GET',$_GET);
 	return $app->handle($subRequest, HttpKernelInterface::SUB_REQUEST);
 });
 
@@ -432,7 +433,7 @@ $app->get('/blog/{year}/',function(Application $app, Request $request, $year)
 $app->get('/blog/', function(Application $app, Request $request)
 {
 	$path = '/blog';
-	$subRequest = Request::create($path, 'GET');
+	$subRequest = Request::create($path, 'GET',$_GET);
 	return $app->handle($subRequest, HttpKernelInterface::SUB_REQUEST);
 });
 //</editor-fold>

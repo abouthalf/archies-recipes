@@ -42,7 +42,7 @@ class DateTimeToStringTransformer extends BaseDateTimeTransformer
     /**
      * Whether to parse by appending a pipe "|" to the parse format.
      *
-     * This only works as of PHP 5.3.8.
+     * This only works as of PHP 5.3.7.
      *
      * @var Boolean
      */
@@ -66,9 +66,10 @@ class DateTimeToStringTransformer extends BaseDateTimeTransformer
 
         $this->generateFormat = $this->parseFormat = $format;
 
-        // The pipe in the parser pattern only works as of PHP 5.3.8
+        // The pipe in the parser pattern only works as of PHP 5.3.7
+        // See http://bugs.php.net/54316
         $this->parseUsingPipe = null === $parseUsingPipe
-            ? version_compare(phpversion(), '5.3.8', '>=')
+            ? version_compare(phpversion(), '5.3.7', '>=')
             : $parseUsingPipe;
 
         // See http://php.net/manual/en/datetime.createfromformat.php
@@ -92,8 +93,9 @@ class DateTimeToStringTransformer extends BaseDateTimeTransformer
      *
      * @return string A value as produced by PHP's date() function
      *
-     * @throws UnexpectedTypeException if the given value is not a \DateTime instance
-     * @throws TransformationFailedException if the output timezone is not supported
+     * @throws TransformationFailedException If the given value is not a \DateTime
+     *                                       instance or if the output timezone
+     *                                       is not supported.
      */
     public function transform($value)
     {
@@ -102,7 +104,7 @@ class DateTimeToStringTransformer extends BaseDateTimeTransformer
         }
 
         if (!$value instanceof \DateTime) {
-            throw new UnexpectedTypeException($value, '\DateTime');
+            throw new TransformationFailedException('Expected a \DateTime.');
         }
 
         $value = clone $value;
@@ -122,9 +124,9 @@ class DateTimeToStringTransformer extends BaseDateTimeTransformer
      *
      * @return \DateTime An instance of \DateTime
      *
-     * @throws UnexpectedTypeException if the given value is not a string
-     * @throws TransformationFailedException if the date could not be parsed
-     * @throws TransformationFailedException if the input timezone is not supported
+     * @throws TransformationFailedException If the given value is not a string,
+     *                                       if the date could not be parsed or
+     *                                       if the input timezone is not supported.
      */
     public function reverseTransform($value)
     {
@@ -133,7 +135,7 @@ class DateTimeToStringTransformer extends BaseDateTimeTransformer
         }
 
         if (!is_string($value)) {
-            throw new UnexpectedTypeException($value, 'string');
+            throw new TransformationFailedException('Expected a string.');
         }
 
         try {
@@ -151,7 +153,7 @@ class DateTimeToStringTransformer extends BaseDateTimeTransformer
                 );
             }
 
-            // On PHP versions < 5.3.8 we need to emulate the pipe operator
+            // On PHP versions < 5.3.7 we need to emulate the pipe operator
             // and reset parts not given in the format to their equivalent
             // of the UNIX base timestamp.
             if (!$this->parseUsingPipe) {

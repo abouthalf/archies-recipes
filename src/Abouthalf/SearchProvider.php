@@ -29,18 +29,18 @@ class SearchProvider implements ServiceProviderInterface
 	 */
 	public function register(Application $app)
 	{
-
-		$app[self::SEARCH_PROVIDER] = $app->protect(function($query) use ($app) {
+		$instance = $this;
+		$app[self::SEARCH_PROVIDER] = $app->protect(function($query) use ($app,$instance) {
 			$indexPath = $app[SearchProvider::SEARCH_INDEX];
 			if (!$indexPath)
 			{
 				throw new Exception(__CLASS__. ' requires a valid search.index path');
 			}
 
-			$index = SearchProvider::getIndex($indexPath);
+			$index = $instance->getIndex($indexPath);
 			if ($index)
 			{
-				return SearchProvider::query($index, $query);
+				return $instance->query($index, $query);
 			}
 			else
 			{
@@ -58,7 +58,7 @@ class SearchProvider implements ServiceProviderInterface
 	 * @param $path
 	 * @return \Zend_Search_Lucene_Interface|null
 	 */
-	public static function getIndex($path)
+	public function getIndex($path)
 	{
 		try
 		{
@@ -78,11 +78,17 @@ class SearchProvider implements ServiceProviderInterface
 	 * @param string $query
 	 * @return array
 	 */
-	public static function query(\Zend_Search_Lucene_Interface $index, $query)
+	public function query(\Zend_Search_Lucene_Interface $index, $query)
 	{
-		$q = Parser::parse($query);
+		$preparedQuery = $this->prepareQuery($query);
+		$q = Parser::parse($preparedQuery);
 		/* @var $hits \Zend_Search_Lucene_Search_QueryHit[] */
 		$hits = $index->find($q,'type',SORT_REGULAR,SORT_DESC);
+		// if no hits are found with an exact phrase, fall back to token search
+		if (count($hits) === 0) {
+			$q = Parser::parse($query);
+			$hits = $index->find($q,'type',SORT_REGULAR,SORT_ASC);
+		}
 		$results = array();
 		foreach($hits as $hit)
 		{
@@ -94,5 +100,21 @@ class SearchProvider implements ServiceProviderInterface
 			$results[] = $h;
 		}
 		return $results;
+	}
+
+	/**
+	 * Assume arbitrary query input is a phrase and wrap in quotes.
+	 *
+	 * @param string $query
+	 * @return string modified query string
+	 */
+	protected function prepareQuery($query) {
+		// if user has entered meta characters, they probably know how to search,
+		// return query unchanged
+		if (preg_match('/"+|\band\b/',$query)) {
+			return $query;
+		}
+		// en-phrase-enate
+		return '"'.trim($query).'"';
 	}
 }

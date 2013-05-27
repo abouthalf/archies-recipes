@@ -16,7 +16,7 @@ class Twig_Extension_StringLoader extends Twig_Extension
     public function getFunctions()
     {
         return array(
-            'template_from_string' => new Twig_Function_Function('twig_template_from_string', array('needs_environment' => true)),
+            new Twig_SimpleFunction('template_from_string', 'twig_template_from_string', array('needs_environment' => true)),
         );
     }
 
@@ -33,7 +33,7 @@ class Twig_Extension_StringLoader extends Twig_Extension
  * Loads a template from a string.
  *
  * <pre>
- * {% include template_from_string("Hello {{ name }}") }}
+ * {{ include(template_from_string("Hello {{ name }}")) }}
  * </pre>
  *
  * @param Twig_Environment $env      A Twig_Environment instance

@@ -1,4 +1,7 @@
 {
+    "name": "abouthalf/recipebook",
+    "description": "http://archiesrecipes.com",
+    "license": "proprietary",
     "require": {
         "silex/silex": "1.0.*@dev",
         "symfony/browser-kit": "2.1.*",

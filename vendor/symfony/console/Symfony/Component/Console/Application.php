@@ -478,20 +478,24 @@ class Application
      */
     public function findNamespace($namespace)
     {
-        $allNamespaces = array();
-        foreach ($this->getNamespaces() as $n) {
-            $allNamespaces[$n] = explode(':', $n);
-        }
-
-        $found = array();
+        $allNamespaces = $this->getNamespaces();
+        $found = '';
         foreach (explode(':', $namespace) as $i => $part) {
-            $abbrevs = static::getAbbreviations(array_unique(array_values(array_filter(array_map(function ($p) use ($i) { return isset($p[$i]) ? $p[$i] : ''; }, $allNamespaces)))));
+            // select sub-namespaces matching the current namespace we found
+            $namespaces = array();
+            foreach ($allNamespaces as $n) {
+                if ('' === $found || 0 === strpos($n, $found)) {
+                    $namespaces[$n] = explode(':', $n);
+                }
+            }
+
+            $abbrevs = static::getAbbreviations(array_unique(array_values(array_filter(array_map(function ($p) use ($i) { return isset($p[$i]) ? $p[$i] : ''; }, $namespaces)))));
 
             if (!isset($abbrevs[$part])) {
                 $message = sprintf('There are no commands defined in the "%s" namespace.', $namespace);
 
                 if (1 <= $i) {
-                    $part = implode(':', $found).':'.$part;
+                    $part = $found.':'.$part;
                 }
 
                 if ($alternatives = $this->findAlternativeNamespace($part, $abbrevs)) {
@@ -507,14 +511,19 @@ class Application
                 throw new \InvalidArgumentException($message);
             }
 
+            // there are multiple matches, but $part is an exact match of one of them so we select it
+            if (in_array($part, $abbrevs[$part])) {
+                $abbrevs[$part] = array($part);
+            }
+
             if (count($abbrevs[$part]) > 1) {
                 throw new \InvalidArgumentException(sprintf('The namespace "%s" is ambiguous (%s).', $namespace, $this->getAbbreviationSuggestions($abbrevs[$part])));
             }
 
-            $found[] = $abbrevs[$part][0];
+            $found .= $found ? ':' . $abbrevs[$part][0] : $abbrevs[$part][0];
         }
 
-        return implode(':', $found);
+        return $found;
     }
 
     /**
@@ -637,19 +646,10 @@ class Application
     {
         $abbrevs = array();
         foreach ($names as $name) {
-            for ($len = strlen($name) - 1; $len > 0; --$len) {
+            for ($len = strlen($name); $len > 0; --$len) {
                 $abbrev = substr($name, 0, $len);
-                if (!isset($abbrevs[$abbrev])) {
-                    $abbrevs[$abbrev] = array($name);
-                } else {
-                    $abbrevs[$abbrev][] = $name;
-                }
+                $abbrevs[$abbrev][] = $name;
             }
-        }
-
-        // Non-abbreviations always get entered, even if they aren't unique
-        foreach ($names as $name) {
-            $abbrevs[$name] = array($name);
         }
 
         return $abbrevs;
@@ -784,7 +784,7 @@ class Application
             $len = $strlen($title);
             $width = $this->getTerminalWidth() ? $this->getTerminalWidth() - 1 : PHP_INT_MAX;
             $lines = array();
-            foreach (preg_split("{\r?\n}", $e->getMessage()) as $line) {
+            foreach (preg_split('/\r?\n/', $e->getMessage()) as $line) {
                 foreach (str_split($line, $width - 4) as $line) {
                     $lines[] = sprintf('  %s  ', $line);
                     $len = max($strlen($line) + 4, $len);
@@ -848,19 +848,9 @@ class Application
      */
     protected function getTerminalWidth()
     {
-        if (defined('PHP_WINDOWS_VERSION_BUILD')) {
-            if ($ansicon = getenv('ANSICON')) {
-                return preg_replace('{^(\d+)x.*$}', '$1', $ansicon);
-            }
+        $dimensions = $this->getTerminalDimensions();
 
-            if (preg_match('{^(\d+)x\d+$}i', $this->getConsoleMode(), $matches)) {
-                return $matches[1];
-            }
-        }
-
-        if (preg_match("{rows.(\d+);.columns.(\d+);}i", $this->getSttyColumns(), $match)) {
-            return $match[2];
-        }
+        return $dimensions[0];
     }
 
     /**
@@ -870,19 +860,41 @@ class Application
      */
     protected function getTerminalHeight()
     {
+        $dimensions = $this->getTerminalDimensions();
+
+        return $dimensions[1];
+    }
+
+    /**
+     * Tries to figure out the terminal dimensions based on the current environment
+     *
+     * @return array Array containing width and height
+     */
+    public function getTerminalDimensions()
+    {
         if (defined('PHP_WINDOWS_VERSION_BUILD')) {
-            if ($ansicon = getenv('ANSICON')) {
-                return preg_replace('{^\d+x\d+ \(\d+x(\d+)\)$}', '$1', trim($ansicon));
+            // extract [w, H] from "wxh (WxH)"
+            if (preg_match('/^(\d+)x\d+ \(\d+x(\d+)\)$/', trim(getenv('ANSICON')), $matches)) {
+                return array((int) $matches[1], (int) $matches[2]);
             }
-
-            if (preg_match('{^\d+x(\d+)$}i', $this->getConsoleMode(), $matches)) {
-                return $matches[1];
+            // extract [w, h] from "wxh"
+            if (preg_match('/^(\d+)x(\d+)$/', $this->getConsoleMode(), $matches)) {
+                return array((int) $matches[1], (int) $matches[2]);
             }
         }
 
-        if (preg_match("{rows.(\d+);.columns.(\d+);}i", $this->getSttyColumns(), $match)) {
-            return $match[1];
+        if ($sttyString = $this->getSttyColumns()) {
+            // extract [w, h] from "rows h; columns w;"
+            if (preg_match('/rows.(\d+);.columns.(\d+);/i', $sttyString, $matches)) {
+                return array((int) $matches[2], (int) $matches[1]);
+            }
+            // extract [w, h] from "; h rows; w columns"
+            if (preg_match('/;.(\d+).rows;.(\d+).columns/i', $sttyString, $matches)) {
+                return array((int) $matches[2], (int) $matches[1]);
+            }
         }
+
+        return array(null, null);
     }
 
     /**
@@ -982,7 +994,7 @@ class Application
             fclose($pipes[2]);
             proc_close($process);
 
-            if (preg_match('{--------+\r?\n.+?(\d+)\r?\n.+?(\d+)\r?\n}', $info, $matches)) {
+            if (preg_match('/--------+\r?\n.+?(\d+)\r?\n.+?(\d+)\r?\n/', $info, $matches)) {
                 return $matches[2].'x'.$matches[1];
             }
         }

@@ -29,5 +29,6 @@
 		"psr-0": {
 			"": "src/"
 		}
-	}
+	},
+	"include-path": ["src/"]
 }

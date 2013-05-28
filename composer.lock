@@ -3,7 +3,7 @@
         "This file locks the dependencies of your project to a known state",
         "Read more about it at http://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file"
     ],
-    "hash": "6a7482c4245a0cde406e44d55292c807",
+    "hash": "a6f4ae17f6af2258ef486a2b1e972389",
     "packages": [
         {
             "name": "doctrine/common",
@@ -59,7 +59,7 @@
                 {
                     "name": "Johannes Schmitt",
                     "email": "schmittjoh@gmail.com",
-                    "homepage": "https://github.com/schmittjoh",
+                    "homepage": "http://jmsyst.com",
                     "role": "Developer of wrapped JMSSerializerBundle"
                 }
             ],
@@ -147,7 +147,7 @@
             },
             "dist": {
                 "type": "zip",
-                "url": "https://github.com/Seldaek/monolog/zipball/1.1.0",
+                "url": "https://api.github.com/repos/Seldaek/monolog/zipball/1.1.0",
                 "reference": "1.1.0",
                 "shasum": ""
             },
@@ -184,7 +184,7 @@
                 "log",
                 "logging"
             ],
-            "time": "2012-04-23 09:27:40"
+            "time": "2012-04-23 16:27:40"
         },
         {
             "name": "pimple/pimple",

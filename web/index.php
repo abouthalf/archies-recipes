@@ -100,12 +100,13 @@ function getPageContent($page)
 {
 	$f = __DIR__. '/../html/'.$page;
 	$contents = file_get_contents($f);
-	if ($content === false) {
+	if ($contents === false) {
 		throw new Exception('content file not found');
 	}
+	$contents = mb_convert_encoding($contents,'utf-8',mb_detect_encoding($contents));
 	$document = new DOMDocument('1.0','UTF-8');
 	$document->substituteEntities = true;
-	$document->loadHTML($contents);
+	$document->loadHTML($contents, LIBXML_NOERROR);
 	$xml = simplexml_import_dom($document);
 //	$h = @fopen($f,'rb');
 //	if ($h === false) {

@@ -11,7 +11,6 @@ use Silex\Provider\FormServiceProvider;
 use Symfony\Component\Form\FormFactory;
 use Swift_Message as Mail;
 use Abouthalf\SearchProvider;
-use DOMDocument;
 
 use Silex\Application;
 
@@ -100,6 +99,14 @@ $loadPageXML = function($page) use ($app)
 function getPageContent($page)
 {
 	$f = __DIR__. '/../html/'.$page;
+	$contents = file_get_contents($f);
+	if ($content === false) {
+		throw new Exception('content file not found');
+	}
+	$document = new DOMDocument('1.0','UTF-8');
+	$document->substituteEntities = true;
+	$document->loadHTML($contents);
+	$xml = simplexml_import_dom($document);
 //	$h = @fopen($f,'rb');
 //	if ($h === false) {
 //		throw new Exception('content file not found');
@@ -108,8 +115,8 @@ function getPageContent($page)
 //	fclose($h);
 //	$xml = simplexml_load_string($txt);
 
-	$dom = DOMDocument::loadHTMLFile($f);
-	$xml = simplexml_import_dom($dom);
+//	$dom = DOMDocument::loadHTMLFile($f);
+
 
 	return $xml;
 }

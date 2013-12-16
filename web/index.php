@@ -106,7 +106,7 @@ function getPageContent($page)
 	$contents = mb_convert_encoding($contents,'utf-8',mb_detect_encoding($contents));
 	$content = mb_convert_encoding($contents, 'html-entities','utf-8');
 	$document = new DOMDocument('1.0','UTF-8');
-	$document->substituteEntities = true;
+//	$document->substituteEntities = true;
 	@$document->loadHTML($contents, LIBXML_NOERROR);
 	$xml = simplexml_import_dom($document);
 //	$h = @fopen($f,'rb');

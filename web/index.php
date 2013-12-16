@@ -104,7 +104,7 @@ function getPageContent($page)
 		throw new Exception('content file not found');
 	}
 	$contents = mb_convert_encoding($contents,'utf-8',mb_detect_encoding($contents));
-	$contents = mb_convert_encoding($contents, 'html-entities','utf-8');
+//	$contents = mb_convert_encoding($contents, 'html-entities','utf-8');
 	$document = new DOMDocument('1.0','UTF-8');
 //	$document->substituteEntities = true;
 	@$document->loadHTML($contents, LIBXML_NOERROR);

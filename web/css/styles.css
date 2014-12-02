@@ -1243,13 +1243,10 @@ h6 {
   font-size: 1rem;
   line-height: 1.5;
 }
-html {
-  box-size: border-box;
-}
-*,
-*:before,
-*:after {
-  box-size: inherit;
+* {
+  -moz-box-sizing: border-box;
+  -webkit-box-sizing: border-box;
+  box-sizing: border-box;
 }
 /* base styles */
 html,

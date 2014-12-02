@@ -15,8 +15,7 @@
 @sidebarWidth: 12rem;
 @contentPadding: 1.5rem;
 
-html {box-size: border-box;}
-*, *:before, *:after {box-size: inherit;}
+* { -moz-box-sizing: border-box; -webkit-box-sizing: border-box; box-sizing: border-box; }
 
 /* base styles */
 html, body {height: 100%;}

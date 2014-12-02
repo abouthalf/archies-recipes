@@ -1,0 +1,83 @@
+@baseTypeColor: #444;
+@quietType: lighten(@baseTypeColor,60);
+
+/* base typography */
+html
+{
+	color: @baseTypeColor;
+	font-size: 16px;
+	font-size: 1em;
+	line-height: 1.5em;
+	font-family: "Palatino Linotype", Palatino, "Book Antiqua", "URW Palladio L", serif;
+	padding: 0;
+	margin: 0;
+}
+
+/* links */
+a {color: #369; text-decoration: none;}
+h1 a, h2 a, h3 a, h4 a, h5 a, h6 a {color: inherit;}
+
+/* universal margin-bottom */
+.universalMarginBottom
+{
+	margin-top: 0;
+	margin-bottom: 24px;
+	margin-bottom:1.5rem;
+}
+
+h1,h2,h3,h4,h5,h6,hgroup,
+ul,ol,dd,
+p,figure,
+pre,table,fieldset,hr,form
+{
+	.universalMarginBottom;
+}
+
+ul ul {margin-bottom: 0;}
+
+/* font -sizes */
+
+.small
+{
+	font-size: 14px;
+	font-size: 0.875rem; /* 14px */
+	line-height: 1.714; /* 24px */
+}
+
+small
+{
+	.small;
+}
+
+h1, .header
+{
+	font-size: 48px;
+	font-size: 3rem; /* 48px */
+	line-height: 1; /* 48px */
+}
+
+h2, .sub-header
+{
+	font-size: 32px;
+	font-size: 2rem; /* 32px */
+	line-height: 1.5; /* 48px */
+}
+
+.big
+{
+	font-size: 24px;
+	font-size: 1.5rem; /* 24px */
+	line-height: 1; /* 24x */
+}
+
+h3, big
+{
+	.big;
+}
+
+h4, h5, h6
+{
+	font-size: 16px;
+	font-size: 1rem;
+	line-height: 1.5;
+}
